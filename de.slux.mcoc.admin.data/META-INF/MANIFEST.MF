@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Common Data
+Bundle-SymbolicName: de.slux.mcoc.admin.data
+Bundle-Version: 0.0.1
+Bundle-ClassPath: 
+ libs/gson-2.8.1.jar,
+ .
+Export-Package: de.slux.mcoc.admin.data.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.11.1"

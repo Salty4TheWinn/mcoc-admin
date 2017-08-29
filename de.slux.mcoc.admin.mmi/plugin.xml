@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="de.slux.mcoc.admin.mmi.Application">
+         </run>
+      </application>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="AWD Planning"
+            class="de.slux.mcoc.admin.mmi.perspective.AllianceWarPlanningPerspective"
+            icon="icons/agent_network.png"
+            id="de.slux.mcoc.admin.mmi.perspective.AllianceWarPlanningPerspective">
+      </perspective>
+      
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="de.slux.mcoc.admin.mmi.perspective.AllianceWarPlanningPerspective">
+         <view
+               ratio="0.3"
+               closeable="false"
+               id="de.slux.mcoc.admin.ui.views.TeamExplorerView"
+               minimized="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               ratio="0.7"
+               closeable="false"
+               id="de.slux.mcoc.admin.ui.views.MapGraphView"
+               minimized="false"
+               relationship="right"
+               relative="org.eclipse.ui.editorss">
+         </view>             
+      </perspectiveExtension>
+      
+   </extension>
+      
+     
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               label="File">
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  icon="icons/exit.png"
+                  label="Exit">
+            </command>
+         </menu>
+         <menu
+               label="Window">
+            <command
+                  commandId="org.eclipse.ui.views.showView"
+                  label="Show View"
+                  style="pulldown">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.perspectives.showPerspective"
+                  label="Open Perspective"
+                  style="push">
+            </command>
+            <separator
+                  name="de.slux.mcoc.admin.mmi.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.ToggleCoolbarAction"
+                  label="Toggle toolbar"
+                  style="push">
+            </command>
+         </menu>
+         <menu
+               id="mcoc.helpMenu"
+               label="Help">
+            <command
+                  commandId="de.slux.mcoc.admin.ui.handlers.OpenHelpHandler"
+                  icon="icons/help.png"
+                  label="Help Contents"
+                  style="push">
+            </command>
+            <command
+                  commandId="de.slux.mcoc.admin.mmi.handler.OpenAboutHandler"
+                  icon="icons/about.png"
+                  label="About"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="de.slux.mcoc.admin.mmi.application"
+            description="Marvel Contest of Champsions Administator Tool"
+            name="mcoc-admin">
+         <property
+               name="appName"
+               value="mcoc-admin">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="de.slux.mcoc.admin.mmi.help.category"
+            defaultHandler="de.slux.mcoc.admin.ui.handlers.OpenHelpHandler"
+            description="Open Help Contents"
+            id="de.slux.mcoc.admin.ui.handlers.OpenHelpHandler"
+            name="Open Help">
+      </command>
+      <command
+            categoryId="de.slux.mcoc.admin.mmi.help.category"
+            defaultHandler="de.slux.mcoc.admin.mmi.handler.OpenAboutHandler"
+            description="Open About"
+            id="de.slux.mcoc.admin.mmi.handler.OpenAboutHandler"
+            name="Open About">
+      </command>
+      <category
+            description="Help content category"
+            id="de.slux.mcoc.admin.mmi.help.category"
+            name="Help">
+      </category>
+   </extension>
+
+</plugin>

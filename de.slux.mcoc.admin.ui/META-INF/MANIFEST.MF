@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MCOC Administratior UI Components
+Bundle-SymbolicName: de.slux.mcoc.admin.ui;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: de.slux.mcoc.admin.ui.McocAdminUiPlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.zest.core;bundle-version="1.3.0",
+ org.eclipse.zest.layouts;bundle-version="1.1.0",
+ org.eclipse.core.filesystem;bundle-version="1.3.100",
+ org.eclipse.ui.ide;bundle-version="3.7.0",
+ de.slux.mcoc.admin.data;bundle-version="0.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: de.slux.mcoc.admin.ui;uses:="org.eclipse.jface.resource,org.eclipse.ui.plugin,org.osgi.framework",
+ de.slux.mcoc.admin.ui.handlers;uses:="org.eclipse.ui,org.eclipse.core.commands",
+ de.slux.mcoc.admin.ui.model,
+ de.slux.mcoc.admin.ui.util;uses:="org.eclipse.core.runtime,org.osgi.framework",
+ de.slux.mcoc.admin.ui.views;uses:="org.eclipse.ui.part,org.eclipse.swt.widgets,org.eclipse.zest.core.viewers"
+Bundle-ClassPath: .

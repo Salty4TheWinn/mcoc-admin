@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MCOC Administrator GUI
+Bundle-SymbolicName: de.slux.mcoc.admin.mmi;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: de.slux.mcoc.admin.mmi.McocAdminMmiGuiPlugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ de.slux.mcoc.admin.ui;bundle-version="0.0.1",
+ de.slux.mcoc.admin.data;bundle-version="0.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

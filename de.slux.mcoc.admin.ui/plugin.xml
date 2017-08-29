@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="de.slux.mcoc.admin.ui.category.aw"
+            class="de.slux.mcoc.admin.ui.views.TeamExplorerView"
+            icon="icons/agent_tree.png"
+            id="de.slux.mcoc.admin.ui.views.TeamExplorerView"
+            name="Defense Team"
+            restorable="true">
+      </view>
+      
+      <view
+            category="de.slux.mcoc.admin.ui.category.aw"
+            class="de.slux.mcoc.admin.ui.views.MapGraphView"
+            icon="icons/agent_network.png"
+            id="de.slux.mcoc.admin.ui.views.MapGraphView"
+            name="Alliance War Map"
+            restorable="true">
+      </view>
+      <category
+            id="de.slux.mcoc.admin.ui.category.aw"
+            name="AW">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+		<command
+			id="de.slux.mcoc.admin.ui.commands.openConfiguration"
+            categoryId="de.slux.mcoc.admin.ui.openSaveCategory"
+            description="Open a configuration"
+            name="Open Configuration"
+            >
+         </command>
+  <category
+        description="Open and save category"
+        id="de.slux.mcoc.admin.ui.openSaveCategory"
+        name="Open Save">
+  </category>
+   </extension>
+</plugin>
