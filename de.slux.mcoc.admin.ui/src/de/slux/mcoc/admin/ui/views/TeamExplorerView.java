@@ -26,6 +26,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
+import de.slux.mcoc.admin.ui.views.provider.PlayerEditingSupport;
 import de.slux.mcoc.admin.ui.views.provider.TeamExplorerContentProvider;
 import de.slux.mcoc.admin.ui.views.provider.TeamExplorerLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -74,11 +75,12 @@ public class TeamExplorerView extends ViewPart
 		treeViewer.setAutoExpandLevel(3);
 		
 		//Set columns
-		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.NONE);
+		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.LEFT);
 		treeViewerColumn_1.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_1));
 		TreeColumn treeColumn = treeViewerColumn_1.getColumn();
 		treeColumn.setText("Name");
-		tcl_composite.setColumnData(treeColumn, new ColumnPixelData(222, true, true));
+		tcl_composite.setColumnData(treeColumn, new ColumnPixelData(80, true, true));
+		treeViewerColumn_1.setEditingSupport(new PlayerEditingSupport(this.treeViewer));
 		
 		TreeViewerColumn treeViewerColumn_2 = new TreeViewerColumn(treeViewer, SWT.NONE);
 		TreeColumn trclmnNewColumn_2 = treeViewerColumn_2.getColumn();

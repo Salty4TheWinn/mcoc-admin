@@ -1,20 +1,27 @@
 package de.slux.mcoc.admin.ui.views.provider;
 
+import java.io.File;
+
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
+import de.slux.mcoc.admin.data.model.ChampionManager;
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
-import de.slux.mcoc.admin.ui.model.PlayerChampion;
 import de.slux.mcoc.admin.ui.model.Player;
+import de.slux.mcoc.admin.ui.model.PlayerChampion;
 import de.slux.mcoc.admin.ui.views.TeamExplorerView;
 
 public class TeamExplorerLabelProvider extends ColumnLabelProvider
 {
-    private static final Image HOME_ICON = McocAdminUiPlugin.getImageDescriptor("icons/home.png").createImage();
-    private static final Image SYSTEM_ICON = McocAdminUiPlugin.getImageDescriptor("icons/system.png").createImage();
-    private static final Image SYSTEM_16_ICON = McocAdminUiPlugin.getImageDescriptor("icons/icon_16.png")
+    private static final Image PORTRAIT_5STAR = McocAdminUiPlugin.getImageDescriptor("icons/generic/portrait_5star.png")
             .createImage();
+    private static final Image PORTRAIT_4STAR = McocAdminUiPlugin.getImageDescriptor("icons/generic/portrait_4star.png")
+            .createImage();
+    private static final Image SYSTEM_ICON = McocAdminUiPlugin.getImageDescriptor("icons/system.png").createImage();
+    private static final Image SYSTEM_16_ICON = McocAdminUiPlugin.getImageDescriptor("icons/icon_16.png").createImage();
     private static final Image BOSS_ICON = McocAdminUiPlugin.getImageDescriptor("icons/agent_boss.png").createImage();
     private static final Image OBSERVER_ICON = McocAdminUiPlugin.getImageDescriptor("icons/agent_observer.png")
             .createImage();
@@ -47,7 +54,8 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
     @Override
     public void dispose()
     {
-        HOME_ICON.dispose();
+        PORTRAIT_4STAR.dispose();
+        PORTRAIT_5STAR.dispose();
         SYSTEM_ICON.dispose();
         SYSTEM_16_ICON.dispose();
         BOSS_ICON.dispose();
@@ -103,6 +111,21 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
     @Override
     public Image getImage(Object item)
     {
+        // Player champion decoration
+        if (item instanceof PlayerChampion)
+        {
+            PlayerChampion pc = (PlayerChampion) item;
+            if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_NAME))
+            {
+                if (pc.getStars() >= 5)
+                    return new Image(PORTRAIT_4STAR.getDevice(), PORTRAIT_5STAR.getImageData().scaledTo(64, 64));
+                else
+                {
+                    return getChampionPortraitImage(pc, 48, 48);
+                }
+            }
+        }
+
         /*
          * if (!column.getColumn().getText().equals(TeamExplorerView.
          * COLUMN_SYSTEM_AGENT)) return null;
@@ -132,5 +155,28 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
          * 
          */
         return null;
+    }
+
+    private Image getChampionPortraitImage(PlayerChampion pc, int width, int height)
+    {
+        Image image = new Image(PORTRAIT_4STAR.getDevice(), width, height);
+        GC gc = new GC(image);
+        gc.setAntialias(SWT.ON);
+        gc.setInterpolation(SWT.HIGH);
+
+        gc.drawImage(PORTRAIT_4STAR, 0, 0, PORTRAIT_4STAR.getBounds().width, PORTRAIT_4STAR.getBounds().height, 0, 0,
+                width, height);
+        if (pc.getId() != null)
+        {
+        Image champImg = McocAdminUiPlugin
+                .getImageDescriptor(ChampionManager.BUNDLE_ID, ChampionManager.CHAMPIONS_IMG_DIR + File.separator
+                        + /* pc.getId() + */ "beast.png")
+                .createImage();
+        gc.drawImage(champImg, 0, 0, champImg.getBounds().width, champImg.getBounds().height, 4, 4, width-12, height-12);
+        champImg.dispose();
+        }
+        gc.dispose();
+        return image;
+
     }
 }

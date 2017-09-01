@@ -117,6 +117,14 @@ public class AWDDataUIModelManager
     }
 
     /**
+     * @return the championModel
+     */
+    public Map<String, Champion> getChampionModel()
+    {
+        return championModel;
+    }
+
+    /**
      * @param key
      * @return
      * @see java.util.Map#remove(java.lang.Object)
