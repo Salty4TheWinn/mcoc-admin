@@ -37,7 +37,7 @@ public class TeamExplorerView extends ViewPart
 
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_STARS = "Stars";
-    public static final String COLUMN_RANK = "String";
+    public static final String COLUMN_RANK = "Rank";
     public static final String COLUMN_SIG_LEV = "Sig Level";
 
     private Tree tree;
@@ -74,7 +74,7 @@ public class TeamExplorerView extends ViewPart
         treeViewerColumn_1.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_1));
         TreeColumn treeColumn = treeViewerColumn_1.getColumn();
         treeColumn.setText(COLUMN_NAME);
-        tcl_composite.setColumnData(treeColumn, new ColumnWeightData(40, 80, true));
+        tcl_composite.setColumnData(treeColumn, new ColumnWeightData(40, 120, true));
         treeViewerColumn_1.setEditingSupport(new PlayerEditingSupport(this.treeViewer, treeViewerColumn_1));
 
         TreeViewerColumn treeViewerColumn_2 = new TreeViewerColumn(treeViewer, SWT.NONE);

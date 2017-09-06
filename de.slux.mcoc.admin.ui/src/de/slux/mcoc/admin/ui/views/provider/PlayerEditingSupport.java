@@ -171,9 +171,12 @@ public class PlayerEditingSupport extends EditingSupport
 
             if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_STARS))
             {
-                PlayerChampion pc = ((PlayerChampion) element);
-                pc.setStars(this.starModel.get((Integer) value));
-                this.viewer.update(element, null);
+                if (((Integer) value) != -1)
+                {
+                    PlayerChampion pc = ((PlayerChampion) element);
+                    pc.setStars(this.starModel.get((Integer) value));
+                    this.viewer.update(element, null);
+                }
             }
 
             if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_RANK))

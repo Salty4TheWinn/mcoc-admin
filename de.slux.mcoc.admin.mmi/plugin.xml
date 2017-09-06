@@ -27,7 +27,7 @@
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="de.slux.mcoc.admin.mmi.perspective.AllianceWarPlanningPerspective">
          <view
-               ratio="0.3"
+               ratio="0.4"
                closeable="false"
                id="de.slux.mcoc.admin.ui.views.TeamExplorerView"
                minimized="false"
@@ -35,7 +35,7 @@
                relative="org.eclipse.ui.editorss">
          </view>
          <view
-               ratio="0.7"
+               ratio="0.6"
                closeable="false"
                id="de.slux.mcoc.admin.ui.views.MapGraphView"
                minimized="false"
