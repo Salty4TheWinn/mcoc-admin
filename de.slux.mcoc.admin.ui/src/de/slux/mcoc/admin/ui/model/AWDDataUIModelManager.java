@@ -1,15 +1,12 @@
 package de.slux.mcoc.admin.ui.model;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 import de.slux.mcoc.admin.data.model.Champion;
 import de.slux.mcoc.admin.data.model.ChampionManager;
-import de.slux.mcoc.admin.ui.model.PlayerChampion.Rank;
 import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
 
 /**
@@ -41,18 +38,6 @@ public class AWDDataUIModelManager
         {
             e.printStackTrace();
         }
-
-        // Create a testing model here
-        /*
-         * Random r = new Random(); int low = 0; int high =
-         * this.championModel.size() - 1; for (int i = 0; i < 10; i++) { Player
-         * p = new Player("Player" + Integer.toString(i), this.teamModel);
-         * this.teamModel.getPlayers().add(p); for (int j = 0; j < 5; j++) {
-         * Champion c = this.championModel.values().toArray(new
-         * Champion[0])[r.nextInt(high - low)]; p.getChampions().add(new
-         * PlayerChampion(c.getId(), c.getName(), r.nextInt(5) + 1,
-         * r.nextInt(high - low), Rank.Rank5, p)); } }
-         */
     }
 
     /**
@@ -104,7 +89,7 @@ public class AWDDataUIModelManager
 
         for (int i = 0; i < 5; ++i)
         {
-            PlayerChampion playerChampion = new PlayerChampion(player);
+            PlayerChampion playerChampion = new PlayerChampion(null, "undefined", "1", "0", "1", player);
             player.getChampions().add(playerChampion);
         }
 

@@ -9,26 +9,21 @@ package de.slux.mcoc.admin.ui.model;
  */
 public class PlayerChampion
 {
-    /**
-     * Chanpion ranks
-     */
-    public enum Rank
-    {
-        RankUnknown, Rank1, Rank2, Rank3, Rank4, Rank5
-    };
+    private static final String DEFAULT_RANK = "1";
+    private static final String DEFAULT_STAR = "1";
 
     private Player player;
     private String id;
     private String name;
-    private int stars;
-    private int sigLevel;
-    private Rank rank;
+    private String stars;
+    private String sigLevel;
+    private String rank;
 
     /**
      * Constructor
      */
     public PlayerChampion(Player player) {
-        this(null, null, -1, -1, Rank.RankUnknown, player);
+        this(null, null, "", DEFAULT_STAR, DEFAULT_RANK, player);
     }
 
     /**
@@ -38,7 +33,7 @@ public class PlayerChampion
      * @param sigLevel
      * @param rank
      */
-    public PlayerChampion(String id, String name, int stars, int sigLevel, Rank rank, Player player) {
+    public PlayerChampion(String id, String name, String stars, String sigLevel, String rank, Player player) {
         super();
         this.player = player;
         this.id = id;
@@ -85,7 +80,7 @@ public class PlayerChampion
     /**
      * @return the stars
      */
-    public int getStars()
+    public String getStars()
     {
         return stars;
     }
@@ -94,7 +89,7 @@ public class PlayerChampion
      * @param stars
      *            the stars to set
      */
-    public void setStars(int stars)
+    public void setStars(String stars)
     {
         this.stars = stars;
     }
@@ -102,7 +97,7 @@ public class PlayerChampion
     /**
      * @return the sigLevel
      */
-    public int getSigLevel()
+    public String getSigLevel()
     {
         return sigLevel;
     }
@@ -111,7 +106,7 @@ public class PlayerChampion
      * @param sigLevel
      *            the sigLevel to set
      */
-    public void setSigLevel(int sigLevel)
+    public void setSigLevel(String sigLevel)
     {
         this.sigLevel = sigLevel;
     }
@@ -119,7 +114,7 @@ public class PlayerChampion
     /**
      * @return the rank
      */
-    public Rank getRank()
+    public String getRank()
     {
         return rank;
     }
@@ -128,7 +123,7 @@ public class PlayerChampion
      * @param rank
      *            the rank to set
      */
-    public void setRank(Rank rank)
+    public void setRank(String rank)
     {
         this.rank = rank;
     }

@@ -68,12 +68,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
 
         Point windowSize = new Point(800, 600);
 
-        // Get screen size
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        windowSize.x = gd.getDisplayMode().getWidth() - 100;
-        /* some margin */;
-        windowSize.y = gd.getDisplayMode().getHeight() - 100;
-
         configurer.setInitialSize(windowSize);
 
         configurer.setShowCoolBar(true);

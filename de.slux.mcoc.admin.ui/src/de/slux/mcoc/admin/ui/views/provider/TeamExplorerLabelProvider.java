@@ -1,12 +1,17 @@
 package de.slux.mcoc.admin.ui.views.provider;
 
 import java.io.File;
+import java.util.logging.Logger;
 
+import org.eclipse.jface.resource.FontDescriptor;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 
 import de.slux.mcoc.admin.data.model.ChampionManager;
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
@@ -16,10 +21,11 @@ import de.slux.mcoc.admin.ui.views.TeamExplorerView;
 
 public class TeamExplorerLabelProvider extends ColumnLabelProvider
 {
-    private static final Image PORTRAIT_5STAR = McocAdminUiPlugin.getImageDescriptor("icons/generic/portrait_5star.png")
-            .createImage();
-    private static final Image PORTRAIT_4STAR = McocAdminUiPlugin.getImageDescriptor("icons/generic/portrait_4star.png")
-            .createImage();
+    private static final Logger LOG = Logger.getLogger(TeamExplorerLabelProvider.class.getName());
+
+    private static final ImageDescriptor UNKNOWN_CHAMP_IMG = McocAdminUiPlugin
+            .getImageDescriptor("icons/generic/unknown_champ.png");
+
     private static final Image SYSTEM_ICON = McocAdminUiPlugin.getImageDescriptor("icons/system.png").createImage();
     private static final Image SYSTEM_16_ICON = McocAdminUiPlugin.getImageDescriptor("icons/icon_16.png").createImage();
     private static final Image BOSS_ICON = McocAdminUiPlugin.getImageDescriptor("icons/agent_boss.png").createImage();
@@ -49,13 +55,42 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.eclipse.jface.viewers.ColumnLabelProvider#getFont(java.lang.Object)
+     */
+    @Override
+    public Font getFont(Object element)
+    {
+
+        if (element instanceof Player)
+
+        {
+            Font f = Display.getDefault().getSystemFont();
+
+            if (f == null)
+            {
+                LOG.severe("Cannot retrieve the system default font");
+            }
+            else
+            {
+                FontDescriptor boldDescriptor = FontDescriptor.createFrom(f).setStyle(SWT.BOLD);
+                Font playerFont = boldDescriptor.createFont(Display.getDefault());
+
+                return playerFont;
+            }
+        }
+
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
      */
     @Override
     public void dispose()
     {
-        PORTRAIT_4STAR.dispose();
-        PORTRAIT_5STAR.dispose();
         SYSTEM_ICON.dispose();
         SYSTEM_16_ICON.dispose();
         BOSS_ICON.dispose();
@@ -90,11 +125,11 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
             if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_NAME))
                 return ((PlayerChampion) item).getName();
             else if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_STARS))
-                return Integer.toString(((PlayerChampion) item).getStars());
+                return ((PlayerChampion) item).getStars();
             else if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_RANK))
-                return ((PlayerChampion) item).getRank().name();
+                return ((PlayerChampion) item).getRank();
             else if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_SIG_LEV))
-                return Integer.toString(((PlayerChampion) item).getSigLevel());
+                return ((PlayerChampion) item).getSigLevel();
             else
                 return "";
         }
@@ -115,68 +150,67 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
         if (item instanceof PlayerChampion)
         {
             PlayerChampion pc = (PlayerChampion) item;
+
+            // Column Name
             if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_NAME))
             {
-                if (pc.getStars() >= 5)
-                    return new Image(PORTRAIT_4STAR.getDevice(), PORTRAIT_5STAR.getImageData().scaledTo(64, 64));
-                else
-                {
-                    return getChampionPortraitImage(pc, 48, 48);
-                }
+                return getChampionPortraitImage(pc, 24, 24);
             }
-        }
 
-        /*
-         * if (!column.getColumn().getText().equals(TeamExplorerView.
-         * COLUMN_SYSTEM_AGENT)) return null;
-         * 
-         * if (item instanceof SubSystemModelItem) { SubSystemModelItem ss =
-         * (SubSystemModelItem) item; if (ss.getType() == SubSystemType.MAIN)
-         * return HOME_ICON; else return SYSTEM_ICON; }
-         * 
-         * if (item instanceof RootAgentElement) return SYSTEM_16_ICON;
-         * 
-         * if (item instanceof AgentModelItem) { AgentModelItem a =
-         * (AgentModelItem) item;
-         * 
-         * if (a.getType() == Type.JADE_MANAGER) return BOSS_ICON;
-         * 
-         * if (a.getType() == Type.JADE_UI) return OBSERVER_ICON;
-         * 
-         * if (a.getType() == Type.JADE_YELLOW_PAGES) return YP_ICON;
-         * 
-         * if (a.hasErrorAlarms()) return WARNING_ICON;
-         * 
-         * if (a.hasWarningAlarms()) return NOTIF_ICON; //
-         * if(a.getStatus().equals(AMSAgentDescription.ACTIVE)) return
-         * ACTIVE_ICON; // else // return SUSPEND_ICON;
-         * 
-         * }
-         * 
-         */
+            // Column Stars
+            if (column.getColumn().getText().equals(TeamExplorerView.COLUMN_STARS))
+            {
+                return getChampionStarsImage(pc);
+                // return null;
+            }
+
+        }
         return null;
+    }
+
+    private Image getChampionStarsImage(PlayerChampion pc)
+    {
+        return null;
+        /*
+         * int stars = 0; if (pc.getStars() > 0) { stars = pc.getStars(); }
+         * 
+         * if (stars == 0) return null;
+         * 
+         * Image image = new Image(STAR_STANDARD.getDevice(), 16 * stars, 16);
+         * GC gc = new GC(image); gc.setAntialias(SWT.ON);
+         * gc.setInterpolation(SWT.HIGH);
+         * 
+         * for (int i = 1; i <= stars; ++i) { gc.drawImage(STAR_STANDARD, 0, 0,
+         * STAR_STANDARD.getBounds().width, STAR_STANDARD.getBounds().height, i
+         * * STAR_STANDARD.getBounds().width, 0, 16, 16); }
+         * 
+         * gc.dispose();
+         * 
+         * return image;
+         */
     }
 
     private Image getChampionPortraitImage(PlayerChampion pc, int width, int height)
     {
-        Image image = new Image(PORTRAIT_4STAR.getDevice(), width, height);
+        Image image = new Image(Display.getDefault(), width, height);
         GC gc = new GC(image);
         gc.setAntialias(SWT.ON);
         gc.setInterpolation(SWT.HIGH);
-
-        gc.drawImage(PORTRAIT_4STAR, 0, 0, PORTRAIT_4STAR.getBounds().width, PORTRAIT_4STAR.getBounds().height, 0, 0,
-                width, height);
         if (pc.getId() != null)
         {
-        Image champImg = McocAdminUiPlugin
-                .getImageDescriptor(ChampionManager.BUNDLE_ID, ChampionManager.CHAMPIONS_IMG_DIR + File.separator
-                        + /* pc.getId() + */ "beast.png")
-                .createImage();
-        gc.drawImage(champImg, 0, 0, champImg.getBounds().width, champImg.getBounds().height, 4, 4, width-12, height-12);
-        champImg.dispose();
+            Image champImg = McocAdminUiPlugin.getImageDescriptor(ChampionManager.BUNDLE_ID,
+                    ChampionManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
+            gc.drawImage(champImg, 0, 0, champImg.getBounds().width, champImg.getBounds().height, 0, 0, width, height);
+            champImg.dispose();
+        }
+        else
+        {
+            Image unknownChampImg = UNKNOWN_CHAMP_IMG.createImage();
+            // Empty image
+            gc.drawImage(unknownChampImg, 0, 0, unknownChampImg.getBounds().width, unknownChampImg.getBounds().height,
+                    0, 0, width, height);
         }
         gc.dispose();
         return image;
-
     }
 }
