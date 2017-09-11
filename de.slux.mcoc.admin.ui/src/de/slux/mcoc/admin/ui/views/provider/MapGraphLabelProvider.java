@@ -1,5 +1,8 @@
 package de.slux.mcoc.admin.ui.views.provider;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
@@ -9,11 +12,17 @@ import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.viewers.IFigureProvider;
+import org.eclipse.zest.core.widgets.ZestStyles;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
+import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
+import de.slux.mcoc.admin.ui.model.ChampionNode;
 import de.slux.mcoc.admin.ui.model.EmptyNode;
+import de.slux.mcoc.admin.ui.model.MapLink;
+import de.slux.mcoc.admin.ui.model.MapLink.MapLinkType;
 import de.slux.mcoc.admin.ui.model.MapNode;
 import de.slux.mcoc.admin.ui.model.PortalNode;
+import de.slux.mcoc.admin.ui.views.figure.ChampionNodeFigure;
 import de.slux.mcoc.admin.ui.views.figure.EmptyNodeFigure;
 import de.slux.mcoc.admin.ui.views.figure.PortalNodeFigure;
 
@@ -24,27 +33,17 @@ import de.slux.mcoc.admin.ui.views.figure.PortalNodeFigure;
 public class MapGraphLabelProvider extends LabelProvider
         implements IEntityStyleProvider, IEntityConnectionStyleProvider, IFigureProvider
 {
+    private static final Logger LOG = Logger.getLogger(MapGraphContentProvider.class.getName());
 
     private static final Image INFO_ICON = McocAdminUiPlugin.getImageDescriptor("icons/info.png").createImage();
-
-    private Color agentColor, systemColor;
-    private Color agentWarningBorderColor, agentErrorBorderColor, agentNormalBorderColor;
-    private Color highlightColor;
-    private Color rootColor;
-    private Color agentColorInactive;
+    private static final Color PORTAL_LINK_COLOR = new Color(Display.getCurrent(), 255, 33, 33);
+    private static final Color BOOST_LINK_COLOR = new Color(Display.getCurrent(), 252, 128, 240);
+    private static final Color PATH_LINK_COLOR = new Color(Display.getCurrent(), 229, 255, 252);
 
     /**
      * Constructor
      */
     public MapGraphLabelProvider() {
-        this.agentColor = new Color(Display.getCurrent(), 227, 246, 255);
-        this.agentColorInactive = new Color(Display.getCurrent(), 240, 240, 240);
-        this.systemColor = new Color(Display.getCurrent(), 255, 244, 227);
-        this.agentWarningBorderColor = new Color(Display.getCurrent(), 250, 246, 0);
-        this.agentErrorBorderColor = new Color(Display.getCurrent(), 214, 0, 0);
-        this.agentNormalBorderColor = new Color(Display.getCurrent(), 0, 0, 0);
-        this.highlightColor = new Color(Display.getCurrent(), 255, 221, 0);
-        this.rootColor = new Color(Display.getCurrent(), 182, 250, 187);
     }
 
     /*
@@ -55,14 +54,6 @@ public class MapGraphLabelProvider extends LabelProvider
     @Override
     public void dispose()
     {
-        this.agentColor.dispose();
-        this.systemColor.dispose();
-        this.agentErrorBorderColor.dispose();
-        this.agentWarningBorderColor.dispose();
-        this.agentNormalBorderColor.dispose();
-        this.highlightColor.dispose();
-        this.rootColor.dispose();
-        this.agentColorInactive.dispose();
         INFO_ICON.dispose();
 
         super.dispose();
@@ -102,7 +93,7 @@ public class MapGraphLabelProvider extends LabelProvider
     @Override
     public Color getNodeHighlightColor(Object entity)
     {
-        return this.highlightColor;
+        return null;
     }
 
     /*
@@ -115,34 +106,19 @@ public class MapGraphLabelProvider extends LabelProvider
     @Override
     public Color getBorderColor(Object entity)
     {
-        /*
-         * if (!(entity instanceof AgentModelItem)) return
-         * this.agentNormalBorderColor;
-         * 
-         * AgentModelItem item = (AgentModelItem) entity;
-         * 
-         * if (item.hasErrorAlarms()) return this.agentErrorBorderColor;
-         * 
-         * if (item.hasWarningAlarms()) return this.agentWarningBorderColor;
-         */
-        return this.agentNormalBorderColor;
+        return null;
     }
 
     @Override
     public Color getBorderHighlightColor(Object entity)
     {
-        return getBorderColor(entity);
+        return null;
     }
 
     @Override
     public int getBorderWidth(Object entity)
     {
-        /*
-         * if (!(entity instanceof AgentModelItem)) return 1;
-         * 
-         * if (((AgentModelItem) entity).getAlarms().isEmpty()) return 1;
-         */
-        return 3;
+        return -1;
     }
 
     /*
@@ -155,16 +131,6 @@ public class MapGraphLabelProvider extends LabelProvider
     @Override
     public Color getBackgroundColour(Object entity)
     {
-        /*
-         * if (entity instanceof AgentModelItem) { // if //
-         * (((AgentModelItem)entity).getStatus().equals(AMSAgentDescription.
-         * ACTIVE)) return this.agentColor; // else // return
-         * this.agentColorInactive; }
-         * 
-         * if (entity instanceof SubSystemModelItem) return this.systemColor;
-         * 
-         * if (entity instanceof RootAgentElement) return this.rootColor;
-         */
         return null;
     }
 
@@ -210,34 +176,136 @@ public class MapGraphLabelProvider extends LabelProvider
             figure.setSize(-1, -1);
         }
 
+        if (element instanceof ChampionNode)
+        {
+            figure = new ChampionNodeFigure((ChampionNode) element);
+            figure.setSize(-1, -1);
+        }
+
         return figure;
     }
 
     @Override
     public int getConnectionStyle(Object src, Object dest)
     {
-        // TODO Auto-generated method stub
-        return 0;
+        if (src instanceof MapNode && dest instanceof MapNode)
+        {
+            MapLink link = getLink((MapNode) src, (MapNode) dest);
+
+            if (link == null)
+            {
+                LOG.warning("Cannot find the link for src=" + src + " dest=" + dest);
+            }
+            else
+            {
+                if (link.getLinkType() == MapLinkType.PathLinkType)
+                {
+                    return ZestStyles.CONNECTIONS_SOLID;
+                }
+                if (link.getLinkType() == MapLinkType.PortalLinkType)
+                {
+                    return ZestStyles.CONNECTIONS_DIRECTED | ZestStyles.CONNECTIONS_DOT;
+                }
+
+                if (link.getLinkType() == MapLinkType.BoostLinkType)
+                {
+                    return ZestStyles.CONNECTIONS_DIRECTED | ZestStyles.CONNECTIONS_DOT;
+                }
+            }
+        }
+
+        return ZestStyles.CONNECTIONS_SOLID;
+    }
+
+    /**
+     * Get the link which matches src and dest
+     * 
+     * @param src
+     * @param dest
+     * @return the link or null if none
+     */
+    private MapLink getLink(MapNode src, MapNode dest)
+    {
+        List<MapLink> links = AWDDataUIModelManager.getInstance().getAwMapLinks();
+        for (MapLink link : links)
+        {
+            if (link.equals(new MapLink(MapLinkType.UnknownType, src, dest)))
+            {
+                // Found the link
+                return link;
+            }
+        }
+
+        return null;
     }
 
     @Override
     public Color getColor(Object src, Object dest)
     {
-        // TODO Auto-generated method stub
+        if (src instanceof MapNode && dest instanceof MapNode)
+        {
+            MapLink link = getLink((MapNode) src, (MapNode) dest);
+
+            if (link == null)
+            {
+                LOG.warning("Cannot find the link for src=" + src + " dest=" + dest);
+            }
+            else
+            {
+                if (link.getLinkType() == MapLinkType.PathLinkType)
+                {
+                    return PATH_LINK_COLOR;
+                }
+                if (link.getLinkType() == MapLinkType.PortalLinkType)
+                {
+                    return PORTAL_LINK_COLOR;
+                }
+
+                if (link.getLinkType() == MapLinkType.BoostLinkType)
+                {
+                    return BOOST_LINK_COLOR;
+                }
+            }
+        }
+
         return null;
     }
 
     @Override
     public Color getHighlightColor(Object src, Object dest)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int getLineWidth(Object src, Object dest)
     {
-        // TODO Auto-generated method stub
+        if (src instanceof MapNode && dest instanceof MapNode)
+        {
+            MapLink link = getLink((MapNode) src, (MapNode) dest);
+
+            if (link == null)
+            {
+                LOG.warning("Cannot find the link for src=" + src + " dest=" + dest);
+            }
+            else
+            {
+                if (link.getLinkType() == MapLinkType.PathLinkType)
+                {
+                    return 2;
+                }
+                if (link.getLinkType() == MapLinkType.PortalLinkType)
+                {
+                    return 2;
+                }
+
+                if (link.getLinkType() == MapLinkType.BoostLinkType)
+                {
+                    return 3;
+                }
+            }
+        }
+
         return 0;
     }
 

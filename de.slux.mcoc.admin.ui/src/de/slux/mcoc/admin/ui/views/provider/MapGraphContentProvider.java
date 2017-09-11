@@ -3,6 +3,8 @@
  */
 package de.slux.mcoc.admin.ui.views.provider;
 
+import java.util.logging.Logger;
+
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -19,6 +21,7 @@ import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
  */
 public class MapGraphContentProvider implements IGraphEntityContentProvider, IContentProvider, DataModelChangedListener
 {
+    private static final Logger LOG = Logger.getLogger(MapGraphContentProvider.class.getName());
 
     private GraphViewer viewer;
 
@@ -42,7 +45,7 @@ public class MapGraphContentProvider implements IGraphEntityContentProvider, ICo
             MapNode node = (MapNode) entity;
             return node.getConnections().toArray();
         }
-        
+
         return null;
     }
 
@@ -105,7 +108,6 @@ public class MapGraphContentProvider implements IGraphEntityContentProvider, ICo
             }
         });
     }
-
 
     @Override
     public void newElement(Object parent, Object child)

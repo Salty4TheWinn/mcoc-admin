@@ -5,7 +5,9 @@ package de.slux.mcoc.admin.ui.views.figure;
 
 import java.util.Objects;
 
+import org.eclipse.draw2d.FigureListener;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.FontDescriptor;
@@ -17,36 +19,38 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
+import de.slux.mcoc.admin.ui.model.ChampionNode;
 import de.slux.mcoc.admin.ui.model.PortalNode;
 
 /**
  * @author Slux
  *
  */
-public class PortalNodeFigure extends ImageFigure
+public class ChampionNodeFigure extends ImageFigure
 {
-    private static final Image PORTAL_NODE_IMAGE = McocAdminUiPlugin.getImageDescriptor("icons/generic/portal_node.png")
-            .createImage();
-    private static final Color PORTAL_NUMBER_BG_COLOR = new Color(Display.getCurrent(), 0, 150, 181);
-    private static final Color PORTAL_NUMBER_FG_COLOR = new Color(Display.getCurrent(), 255, 255, 255);
+    private static final Image CHAMPION_NODE_IMAGE = McocAdminUiPlugin
+            .getImageDescriptor("icons/generic/champion_node.png").createImage();
+    private static final Color PORTAL_NUMBER_BG_COLOR = new Color(Display.getCurrent(), 255, 171, 15);
+    private static final Color PORTAL_NUMBER_FG_COLOR = new Color(Display.getCurrent(), 0, 0, 0);
     private static final Font LABEL_FONT;
-
+    
     static
     {
         Font currentFont = Display.getCurrent().getSystemFont();
         FontDescriptor boldDescriptor = FontDescriptor.createFrom(currentFont).setStyle(SWT.BOLD).setHeight(5);
         LABEL_FONT = boldDescriptor.createFont(Display.getDefault());
     }
-
-    private PortalNode node;
+    
+    
+    private ChampionNode node;
 
     /**
      * Ctor
      * 
      * @param node
      */
-    public PortalNodeFigure(PortalNode node) {
-        super(PORTAL_NODE_IMAGE);
+    public ChampionNodeFigure(ChampionNode node) {
+        super(CHAMPION_NODE_IMAGE);
         this.node = Objects.requireNonNull(node);
     }
 
@@ -72,9 +76,9 @@ public class PortalNodeFigure extends ImageFigure
         int avgCharWidth = fontMetrics.getAverageCharWidth();
         int fontWidth = avgCharWidth * this.node.getNodeId().getNodeNumber().toString().length();
 
-        graphics.fillText(this.node.getNodeId().getNodeNumber().toString(), area.x + area.width - fontWidth,
+        graphics.fillText(this.node.getNodeId().getNodeNumber().toString(), area.x + (area.width / 2) - (fontWidth / 2),
                 area.y + area.height - fontMetrics.getHeight());
-
+        
     }
 
 }

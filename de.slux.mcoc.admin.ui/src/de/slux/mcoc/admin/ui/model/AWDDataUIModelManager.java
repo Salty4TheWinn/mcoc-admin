@@ -1,5 +1,6 @@
 package de.slux.mcoc.admin.ui.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,15 +24,15 @@ import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
  */
 public class AWDDataUIModelManager
 {
-    /*
-     * private static final int TOTAL_AW_MAP_CHAMP_NODES = 55; private static
-     * final int TOTAL_AW_MAP_PORTAL_NODES = 21; private static final int
-     * TOTAL_AW_MAP_EMPTY_NODES = 22;
-     */
+    //private static final int TOTAL_AW_MAP_CHAMP_NODES = 55;
+    //private static final int TOTAL_AW_MAP_PORTAL_NODES = 21;
+    //private static final int TOTAL_AW_MAP_EMPTY_NODES = 22;
+
     // TESTING
-    private static final int TOTAL_AW_MAP_CHAMP_NODES = 2;
+    private static final int TOTAL_AW_MAP_CHAMP_NODES = 3;
     private static final int TOTAL_AW_MAP_PORTAL_NODES = 1;
     private static final int TOTAL_AW_MAP_EMPTY_NODES = 2;
+    
     private static final Logger LOG = Logger.getLogger(AWDDataUIModelManager.class.getName());
     private static AWDDataUIModelManager INSTANCE = new AWDDataUIModelManager();
 
@@ -39,7 +40,7 @@ public class AWDDataUIModelManager
     private Team teamModel;
     private Map<String, Champion> championModel;
     private Map<NodeId, MapNode> awMapNodes;
-    private Set<MapLink> awMapLinks;
+    private List<MapLink> awMapLinks;
 
     /**
      * Private singleton constructor
@@ -81,9 +82,9 @@ public class AWDDataUIModelManager
             awMapNodes.put(node.getNodeId(), node);
         }
 
-        this.awMapLinks = new HashSet<>();
+        this.awMapLinks = new ArrayList<>();
 
-        // setupAwMapNodeLinks();
+        //setupAwMapNodeLinks();
         setupAwMapTestNodeLinks();
 
     }
@@ -92,14 +93,17 @@ public class AWDDataUIModelManager
     {
         // Empty node links
         connectNode(new NodeId(NodeType.EmptyNode, 0), new NodeId[] { new NodeId(NodeType.PortalNode, 1) });
-        connectNode(new NodeId(NodeType.EmptyNode, 1), new NodeId[] { new NodeId(NodeType.ChampionNode, 1) });
+        connectNode(new NodeId(NodeType.EmptyNode, 1),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 1), new NodeId(NodeType.ChampionNode, 3) });
         connectNode(new NodeId(NodeType.EmptyNode, 2), new NodeId[] { new NodeId(NodeType.ChampionNode, 2) });
 
         // Portal node links
         connectNode(new NodeId(NodeType.PortalNode, 1), new NodeId[] { new NodeId(NodeType.EmptyNode, 1) });
-        
+
         // Champion node links
         connectNode(new NodeId(NodeType.ChampionNode, 1), new NodeId[] { new NodeId(NodeType.EmptyNode, 2) });
+        connectNode(new NodeId(NodeType.ChampionNode, 3), new NodeId[] { new NodeId(NodeType.EmptyNode, 2) });
+        connectNode(new NodeId(NodeType.ChampionNode, 3), new NodeId[] { new NodeId(NodeType.ChampionNode, 1) });
     }
 
     private void setupAwMapNodeLinks()
@@ -203,7 +207,12 @@ public class AWDDataUIModelManager
             source.getConnections().add(destination);
 
             // Create the links
-            if (source.getNodeId().getType() == NodeType.EmptyNode
+            if (source.getNodeId().getType() == NodeType.ChampionNode
+                    && destination.getNodeId().getType() == NodeType.ChampionNode)
+            {
+                this.awMapLinks.add(new MapLink(MapLinkType.BoostLinkType, source, destination));
+            }
+            else if (source.getNodeId().getType() == NodeType.EmptyNode
                     || source.getNodeId().getType() == NodeType.ChampionNode)
             {
                 this.awMapLinks.add(new MapLink(MapLinkType.PathLinkType, source, destination));
@@ -293,6 +302,14 @@ public class AWDDataUIModelManager
     public Collection<MapNode> getAwMapNodes()
     {
         return this.awMapNodes.values();
+    }
+
+    /**
+     * @return the awMapLinks
+     */
+    public List<MapLink> getAwMapLinks()
+    {
+        return awMapLinks;
     }
 
     /**

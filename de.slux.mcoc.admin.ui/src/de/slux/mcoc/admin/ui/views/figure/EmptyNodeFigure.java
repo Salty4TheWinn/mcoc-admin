@@ -29,7 +29,23 @@ public class EmptyNodeFigure extends ImageFigure
      */
     public EmptyNodeFigure(EmptyNode node) {
         super(EMPTY_NODE_IMAGE);
-        this.node = Objects.requireNonNull(node);
+        this.setNode(Objects.requireNonNull(node));
+    }
+
+    /**
+     * @return the node
+     */
+    public EmptyNode getNode()
+    {
+        return node;
+    }
+
+    /**
+     * @param node the node to set
+     */
+    public void setNode(EmptyNode node)
+    {
+        this.node = node;
     }
 
 }

@@ -15,6 +15,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
@@ -63,6 +65,8 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         graphViewer.setInput(MapGraphContentProvider.getInitialInput());
         graphViewer.getControl().setBackground(BG_COLOR);
 
+        setupGraphAntiAliasing();
+        
         getSite().setSelectionProvider(graphViewer);
 
         graphViewer.addDoubleClickListener(new IDoubleClickListener()
@@ -92,6 +96,31 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
 
         initialiseToolBar();
 
+    }
+
+    /**
+     * This is a hack but Zest does not provide any native solution
+     */
+    private void setupGraphAntiAliasing()
+    {
+        Listener[] listeners = this.graphViewer.getControl().getListeners(SWT.Paint);
+        for (int i=0; i<listeners.length; i++) 
+        {
+            this.graphViewer.getControl().removeListener(SWT.Paint, listeners[i]);
+        }
+        
+        this.graphViewer.getControl().addListener(SWT.Paint, new Listener() {
+            @Override
+            public void handleEvent(Event event) 
+            {
+                event.gc.setAntialias(SWT.ON);
+                event.gc.setTextAntialias(SWT.ON);
+            }});
+        
+        for (int i=0; i<listeners.length; i++) 
+        {
+            this.graphViewer.getControl().addListener(SWT.Paint, listeners[i]);
+        }
     }
 
     private void initialiseToolBar()

@@ -13,7 +13,7 @@ public class MapLink
 {
     public enum MapLinkType
     {
-        PathLinkType, PortalLinkType, BoostLinkType;
+        UnknownType, PathLinkType, PortalLinkType, BoostLinkType;
     }
 
     private MapNode source;

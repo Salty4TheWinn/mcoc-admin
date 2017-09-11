@@ -27,10 +27,14 @@ import de.slux.mcoc.admin.data.model.Champion.ChampionClass;
 import de.slux.mcoc.admin.data.model.ChampionManager;
 
 /**
- *
+ * @author Slux
  */
 public class SyncDataTool
 {
+    // TODO: deal with boosts and map using the following
+    // http://mcoc.dyndns.org/aw/js/aw_s2_advanced_9path.json
+    // http://mcoc.dyndns.org/global/ui/js/booster.js
+    
     /**
      * @param args
      */
