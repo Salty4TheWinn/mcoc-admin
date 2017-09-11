@@ -1,21 +1,28 @@
 package de.slux.mcoc.admin.ui.views.provider;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.zest.core.viewers.EntityConnectionData;
+import org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
+import org.eclipse.zest.core.viewers.IFigureProvider;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
+import de.slux.mcoc.admin.ui.model.EmptyNode;
+import de.slux.mcoc.admin.ui.model.MapNode;
+import de.slux.mcoc.admin.ui.model.PortalNode;
+import de.slux.mcoc.admin.ui.views.figure.EmptyNodeFigure;
+import de.slux.mcoc.admin.ui.views.figure.PortalNodeFigure;
 
 /**
  * @author slux
  *
  */
-public class MapGraphLabelProvider extends LabelProvider implements IEntityStyleProvider
+public class MapGraphLabelProvider extends LabelProvider
+        implements IEntityStyleProvider, IEntityConnectionStyleProvider, IFigureProvider
 {
 
     private static final Image INFO_ICON = McocAdminUiPlugin.getImageDescriptor("icons/info.png").createImage();
@@ -84,17 +91,12 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
         if (element instanceof EntityConnectionData)
             return ""; // No label on the connection
 
-        /*
-        if (element instanceof AgentModelItem)
-            return ((AgentModelItem) element).getName();
+        if (element instanceof MapNode)
+        {
+            return ((MapNode) element).getNodeId().toString();
+        }
 
-        if (element instanceof SubSystemModelItem)
-            return ((SubSystemModelItem) element).getName();
-
-        if (element instanceof RootAgentElement)
-            return ((RootAgentElement) element).getName();
-        */
-        return "FOO.BAR"; // FIXME
+        return "???"; // FIXME
     }
 
     @Override
@@ -114,17 +116,15 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
     public Color getBorderColor(Object entity)
     {
         /*
-        if (!(entity instanceof AgentModelItem))
-            return this.agentNormalBorderColor;
-
-        AgentModelItem item = (AgentModelItem) entity;
-
-        if (item.hasErrorAlarms())
-            return this.agentErrorBorderColor;
-
-        if (item.hasWarningAlarms())
-            return this.agentWarningBorderColor;
-*/
+         * if (!(entity instanceof AgentModelItem)) return
+         * this.agentNormalBorderColor;
+         * 
+         * AgentModelItem item = (AgentModelItem) entity;
+         * 
+         * if (item.hasErrorAlarms()) return this.agentErrorBorderColor;
+         * 
+         * if (item.hasWarningAlarms()) return this.agentWarningBorderColor;
+         */
         return this.agentNormalBorderColor;
     }
 
@@ -138,12 +138,10 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
     public int getBorderWidth(Object entity)
     {
         /*
-        if (!(entity instanceof AgentModelItem))
-            return 1;
-
-        if (((AgentModelItem) entity).getAlarms().isEmpty())
-            return 1;
-*/
+         * if (!(entity instanceof AgentModelItem)) return 1;
+         * 
+         * if (((AgentModelItem) entity).getAlarms().isEmpty()) return 1;
+         */
         return 3;
     }
 
@@ -158,21 +156,15 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
     public Color getBackgroundColour(Object entity)
     {
         /*
-        if (entity instanceof AgentModelItem)
-        {
-            // if
-            // (((AgentModelItem)entity).getStatus().equals(AMSAgentDescription.ACTIVE))
-            return this.agentColor;
-            // else
-            // return this.agentColorInactive;
-        }
-
-        if (entity instanceof SubSystemModelItem)
-            return this.systemColor;
-
-        if (entity instanceof RootAgentElement)
-            return this.rootColor;
-*/
+         * if (entity instanceof AgentModelItem) { // if //
+         * (((AgentModelItem)entity).getStatus().equals(AMSAgentDescription.
+         * ACTIVE)) return this.agentColor; // else // return
+         * this.agentColorInactive; }
+         * 
+         * if (entity instanceof SubSystemModelItem) return this.systemColor;
+         * 
+         * if (entity instanceof RootAgentElement) return this.rootColor;
+         */
         return null;
     }
 
@@ -186,14 +178,13 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
     public IFigure getTooltip(Object entity)
     {
         /*
-        if (!(entity instanceof AgentModelItem))
-            return null;
-
-        AgentModelItem item = (AgentModelItem) entity;
-
-        if (!item.getAlarms().isEmpty())
-            return new Label(String.format("%d alarm(s)", item.getAlarms().size()), INFO_ICON);
-*/
+         * if (!(entity instanceof AgentModelItem)) return null;
+         * 
+         * AgentModelItem item = (AgentModelItem) entity;
+         * 
+         * if (!item.getAlarms().isEmpty()) return new Label(String.format(
+         * "%d alarm(s)", item.getAlarms().size()), INFO_ICON);
+         */
         return null;
     }
 
@@ -201,6 +192,53 @@ public class MapGraphLabelProvider extends LabelProvider implements IEntityStyle
     public boolean fisheyeNode(Object entity)
     {
         return false;
+    }
+
+    @Override
+    public IFigure getFigure(Object element)
+    {
+        IFigure figure = null;
+        if (element instanceof EmptyNode)
+        {
+            figure = new EmptyNodeFigure((EmptyNode) element);
+            figure.setSize(-1, -1);
+        }
+
+        if (element instanceof PortalNode)
+        {
+            figure = new PortalNodeFigure((PortalNode) element);
+            figure.setSize(-1, -1);
+        }
+
+        return figure;
+    }
+
+    @Override
+    public int getConnectionStyle(Object src, Object dest)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public Color getColor(Object src, Object dest)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Color getHighlightColor(Object src, Object dest)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public int getLineWidth(Object src, Object dest)
+    {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

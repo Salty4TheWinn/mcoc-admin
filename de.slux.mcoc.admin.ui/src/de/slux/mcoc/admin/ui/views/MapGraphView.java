@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -25,7 +26,7 @@ import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
 import org.eclipse.zest.core.viewers.ZoomContributionViewItem;
 import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.LayoutStyles;
-import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
+import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.views.provider.MapGraphContentProvider;
@@ -40,6 +41,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
     private static final Logger LOG = Logger.getLogger(MapGraphView.class.getName());
 
     private static final ImageDescriptor REFRESH_ICON = McocAdminUiPlugin.getImageDescriptor("icons/refresh.png");
+    private static final Color BG_COLOR = new Color(Display.getCurrent(), 93, 113, 145);
 
     private GraphViewer graphViewer;
     private ISelectionListener listener;
@@ -59,7 +61,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         graphViewer.setLabelProvider(new MapGraphLabelProvider());
         graphViewer.setNodeStyle(ZestStyles.NODES_CACHE_LABEL | ZestStyles.NODES_NO_ANIMATION);
         graphViewer.setInput(MapGraphContentProvider.getInitialInput());
-        graphViewer.getControl().setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+        graphViewer.getControl().setBackground(BG_COLOR);
 
         getSite().setSelectionProvider(graphViewer);
 
@@ -102,8 +104,8 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
             }
         };
 
-        this.actionAcknowledgeAll.setText("Acknowledge alarms of every agent");
-        this.actionAcknowledgeAll.setToolTipText("Acknowledge alarms of every agent");
+        this.actionAcknowledgeAll.setText("TODO");
+        this.actionAcknowledgeAll.setToolTipText("TODO");
         this.actionAcknowledgeAll.setImageDescriptor(McocAdminUiPlugin.getImageDescriptor("icons/acknowledge_all.png"));
 
         IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
@@ -164,13 +166,11 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
      */
     private void applyLayout()
     {
-        // SpringLayoutAlgorithm springAlgorithm = new
-        // SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-        RadialLayoutAlgorithm radialAlgorithm = new RadialLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-        // GridLayoutAlgorithm gridAlgorithm = new
-        // GridLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-        // TreeLayoutAlgorithm treeAlgorithm = new
-        // TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+        //SpringLayoutAlgorithm algorithm = new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+        //RadialLayoutAlgorithm algorithm = new RadialLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+         //GridLayoutAlgorithm gridAlgorithm = new
+         //GridLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+        TreeLayoutAlgorithm algorithm = new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
         /*
          * CompositeLayoutAlgorithm compositeAlgorithm = new
          * CompositeLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING, new
@@ -178,7 +178,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
          * DirectedGraphLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING),
          * new HorizontalShift(LayoutStyles.NO_LAYOUT_NODE_RESIZING) });
          */
-        graphViewer.setLayoutAlgorithm(radialAlgorithm, true);
+        graphViewer.setLayoutAlgorithm(algorithm, true);
     }
 
     /**
