@@ -3,6 +3,7 @@
  */
 package de.slux.mcoc.admin.ui.views.figure;
 
+import java.io.File;
 import java.util.Objects;
 
 import org.eclipse.draw2d.FigureListener;
@@ -18,8 +19,10 @@ import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import de.slux.mcoc.admin.data.model.ChampionManager;
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.ChampionNode;
+import de.slux.mcoc.admin.ui.model.PlayerChampion;
 import de.slux.mcoc.admin.ui.model.PortalNode;
 
 /**
@@ -62,10 +65,27 @@ public class ChampionNodeFigure extends ImageFigure
     @Override
     protected void paintFigure(Graphics graphics)
     {
+        graphics.setAntialias(SWT.ON);
+        graphics.setTextAntialias(SWT.ON);
+        graphics.setAdvanced(true);
+        graphics.setInterpolation(SWT.HIGH);
         super.paintFigure(graphics);
 
         // We add the portal number
         Rectangle area = getBounds().getShrinked(getInsets());
+
+        // Add the champion if any
+        if (this.node.getPlayerChampion() != null)
+        {
+            PlayerChampion pc = this.node.getPlayerChampion();
+            Image champImg = McocAdminUiPlugin.getImageDescriptor(ChampionManager.BUNDLE_ID,
+                    ChampionManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
+
+            graphics.drawImage(champImg, champImg.getBounds().x, champImg.getBounds().y, champImg.getBounds().height,
+                    champImg.getBounds().width, area.x + 8, area.y + 5, 28, 28);
+
+            champImg.dispose();
+        }
 
         graphics.setBackgroundColor(PORTAL_NUMBER_BG_COLOR);
         graphics.setForegroundColor(PORTAL_NUMBER_FG_COLOR);

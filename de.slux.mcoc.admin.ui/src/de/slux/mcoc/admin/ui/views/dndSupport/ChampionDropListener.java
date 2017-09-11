@@ -3,6 +3,8 @@
  */
 package de.slux.mcoc.admin.ui.views.dndSupport;
 
+import java.util.Objects;
+
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -13,8 +15,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.widgets.Graph;
 
+import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
 import de.slux.mcoc.admin.ui.model.ChampionNode;
 import de.slux.mcoc.admin.ui.model.MapNode;
+import de.slux.mcoc.admin.ui.model.Player;
+import de.slux.mcoc.admin.ui.model.PlayerChampion;
 import de.slux.mcoc.admin.ui.views.figure.ChampionNodeFigure;
 
 /**
@@ -23,6 +28,7 @@ import de.slux.mcoc.admin.ui.views.figure.ChampionNodeFigure;
  */
 public class ChampionDropListener extends ViewerDropAdapter
 {
+    private ChampionNode lastDroppedNode;
 
     /**
      * @param viewer
@@ -61,11 +67,11 @@ public class ChampionDropListener extends ViewerDropAdapter
 
         if (target instanceof ChampionNodeFigure)
         {
-            //We got a valid drop
-            ChampionNode cn = ((ChampionNodeFigure)target).getNode();
-            
+            // We got a valid drop
+            ChampionNode cn = ((ChampionNodeFigure) target).getNode();
+            this.lastDroppedNode = cn;
             System.out.println("Dropped on champion node: " + cn);
-            
+
             super.drop(event);
         }
     }
@@ -82,6 +88,22 @@ public class ChampionDropListener extends ViewerDropAdapter
     {
         String playerChampionUniqueId = data.toString();
         System.out.println("Drop performed: " + playerChampionUniqueId);
+
+        // Let's look for this champion and attach it to the target
+        for (Player p : AWDDataUIModelManager.getInstance().getTeamModel().getPlayers())
+        {
+            for (PlayerChampion pc : p.getChampions())
+            {
+                if (pc.getUniqueId().equals(playerChampionUniqueId))
+                {
+                    // Found it.
+                    Objects.requireNonNull(this.lastDroppedNode).setPlayerChampion(pc);
+                    System.out.println("DROPPED on " + this.lastDroppedNode);
+                }
+            }
+        }
+
+        this.lastDroppedNode = null;
         return true;
     }
 
