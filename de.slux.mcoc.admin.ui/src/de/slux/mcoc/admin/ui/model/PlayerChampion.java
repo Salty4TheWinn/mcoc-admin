@@ -3,6 +3,8 @@
  */
 package de.slux.mcoc.admin.ui.model;
 
+import java.util.UUID;
+
 /**
  * @author slux
  *
@@ -18,6 +20,7 @@ public class PlayerChampion
     private String stars;
     private String sigLevel;
     private String rank;
+    private String uniqueId;
 
     /**
      * Constructor
@@ -41,6 +44,8 @@ public class PlayerChampion
         this.stars = stars;
         this.sigLevel = sigLevel;
         this.rank = rank;
+        
+        this.uniqueId = UUID.randomUUID().toString();
     }
 
     /**
@@ -143,6 +148,14 @@ public class PlayerChampion
     public void setPlayer(Player player)
     {
         this.player = player;
+    }
+
+    /**
+     * @return the uniqueId
+     */
+    public String getUniqueId()
+    {
+        return uniqueId;
     }
 
     /*

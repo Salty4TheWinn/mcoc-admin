@@ -33,15 +33,14 @@ public class ChampionNodeFigure extends ImageFigure
     private static final Color PORTAL_NUMBER_BG_COLOR = new Color(Display.getCurrent(), 255, 171, 15);
     private static final Color PORTAL_NUMBER_FG_COLOR = new Color(Display.getCurrent(), 0, 0, 0);
     private static final Font LABEL_FONT;
-    
+
     static
     {
         Font currentFont = Display.getCurrent().getSystemFont();
         FontDescriptor boldDescriptor = FontDescriptor.createFrom(currentFont).setStyle(SWT.BOLD).setHeight(5);
         LABEL_FONT = boldDescriptor.createFont(Display.getDefault());
     }
-    
-    
+
     private ChampionNode node;
 
     /**
@@ -78,7 +77,15 @@ public class ChampionNodeFigure extends ImageFigure
 
         graphics.fillText(this.node.getNodeId().getNodeNumber().toString(), area.x + (area.width / 2) - (fontWidth / 2),
                 area.y + area.height - fontMetrics.getHeight());
-        
+
+    }
+
+    /**
+     * @return the node
+     */
+    public ChampionNode getNode()
+    {
+        return node;
     }
 
 }

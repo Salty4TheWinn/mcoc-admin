@@ -1,18 +1,20 @@
 package de.slux.mcoc.admin.ui.views;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -23,6 +25,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
+import de.slux.mcoc.admin.ui.views.dndSupport.ChampionDragListener;
 import de.slux.mcoc.admin.ui.views.provider.PlayerEditingSupport;
 import de.slux.mcoc.admin.ui.views.provider.TeamExplorerContentProvider;
 import de.slux.mcoc.admin.ui.views.provider.TeamExplorerLabelProvider;
@@ -69,27 +72,35 @@ public class TeamExplorerView extends ViewPart
         tree.setLinesVisible(true);
         treeViewer.setAutoExpandLevel(3);
 
+        List<PlayerEditingSupport> editingSupports = new ArrayList<>();
+
         // Set columns
         TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.LEFT);
         treeViewerColumn_1.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_1));
         TreeColumn treeColumn = treeViewerColumn_1.getColumn();
         treeColumn.setText(COLUMN_NAME);
         tcl_composite.setColumnData(treeColumn, new ColumnWeightData(40, 120, true));
-        treeViewerColumn_1.setEditingSupport(new PlayerEditingSupport(this.treeViewer, treeViewerColumn_1));
+        PlayerEditingSupport editingSupport = new PlayerEditingSupport(this.treeViewer, treeViewerColumn_1);
+        editingSupports.add(editingSupport);
+        treeViewerColumn_1.setEditingSupport(editingSupport);
 
         TreeViewerColumn treeViewerColumn_2 = new TreeViewerColumn(treeViewer, SWT.NONE);
         TreeColumn trclmnNewColumn_2 = treeViewerColumn_2.getColumn();
         tcl_composite.setColumnData(trclmnNewColumn_2, new ColumnWeightData(20, 50, true));
         trclmnNewColumn_2.setText(COLUMN_STARS);
         treeViewerColumn_2.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_2));
-        treeViewerColumn_2.setEditingSupport(new PlayerEditingSupport(this.treeViewer, treeViewerColumn_2));
+        editingSupport = new PlayerEditingSupport(this.treeViewer, treeViewerColumn_2);
+        editingSupports.add(editingSupport);
+        treeViewerColumn_2.setEditingSupport(editingSupport);
 
         TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
         TreeColumn trclmnNewColumn = treeViewerColumn.getColumn();
         tcl_composite.setColumnData(trclmnNewColumn, new ColumnWeightData(20, 20, true));
         trclmnNewColumn.setText(COLUMN_RANK);
         treeViewerColumn.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn));
-        treeViewerColumn.setEditingSupport(new PlayerEditingSupport(this.treeViewer, treeViewerColumn));
+        editingSupport = new PlayerEditingSupport(this.treeViewer, treeViewerColumn);
+        editingSupports.add(editingSupport);
+        treeViewerColumn.setEditingSupport(editingSupport);
 
         TreeViewerColumn treeViewerColumn_3 = new TreeViewerColumn(treeViewer, SWT.NONE);
         treeViewerColumn_3.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_3));
@@ -97,7 +108,9 @@ public class TeamExplorerView extends ViewPart
         trclmnSignature.setText(COLUMN_SIG_LEV);
         tcl_composite.setColumnData(trclmnSignature, new ColumnWeightData(20, 5, true));
         treeViewerColumn_3.setLabelProvider(new TeamExplorerLabelProvider(treeViewerColumn_3));
-        treeViewerColumn_3.setEditingSupport(new PlayerEditingSupport(this.treeViewer, treeViewerColumn_3));
+        editingSupport = new PlayerEditingSupport(this.treeViewer, treeViewerColumn_3);
+        editingSupports.add(editingSupport);
+        treeViewerColumn_3.setEditingSupport(editingSupport);
 
         TeamExplorerContentProvider contentProvider = new TeamExplorerContentProvider(treeViewer);
         treeViewer.setContentProvider(contentProvider);
@@ -106,6 +119,11 @@ public class TeamExplorerView extends ViewPart
         // getSite().setSelectionProvider(treeViewer);
 
         // registerSelectionListener();
+
+        // D&D Support
+        int operations = DND.DROP_COPY | DND.DROP_MOVE;
+        Transfer[] transferTypes = new Transfer[] { TextTransfer.getInstance() };
+        this.treeViewer.addDragSupport(operations, transferTypes, new ChampionDragListener(this.treeViewer, editingSupports));
 
         initialiseToolBar();
     }

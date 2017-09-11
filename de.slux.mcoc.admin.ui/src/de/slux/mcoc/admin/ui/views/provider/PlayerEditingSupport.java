@@ -212,4 +212,15 @@ public class PlayerEditingSupport extends EditingSupport
         }
     }
 
+    /**
+     * Close all editors
+     */
+    public void closeAll()
+    {
+        this.champCellEditor.deactivate();
+        this.playerCellEditor.deactivate();
+        this.rankCellEditor.deactivate();
+        this.starsCellEditor.deactivate();
+    }
+
 }

@@ -11,7 +11,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -31,6 +35,7 @@ import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
+import de.slux.mcoc.admin.ui.views.dndSupport.ChampionDropListener;
 import de.slux.mcoc.admin.ui.views.provider.MapGraphContentProvider;
 import de.slux.mcoc.admin.ui.views.provider.MapGraphLabelProvider;
 
@@ -64,6 +69,12 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         graphViewer.setNodeStyle(ZestStyles.NODES_CACHE_LABEL | ZestStyles.NODES_NO_ANIMATION);
         graphViewer.setInput(MapGraphContentProvider.getInitialInput());
         graphViewer.getControl().setBackground(BG_COLOR);
+
+        // D&D SUpport
+        int operations = DND.DROP_COPY | DND.DROP_MOVE;
+        Transfer[] transferTypes = new Transfer[]{TextTransfer.getInstance()};
+        this.graphViewer.addDropSupport(operations, transferTypes, new ChampionDropListener(this.graphViewer));
+        
 
         setupGraphAntiAliasing();
         
