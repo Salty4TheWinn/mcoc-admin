@@ -96,6 +96,12 @@ public class PortalNodeFigure extends ImageFigure
         graphics.fillText(this.node.getNodeId().getNodeNumber().toString(), area.x + area.width - fontWidth,
                 area.y + area.height - fontMetrics.getHeight());
 
+        // Debug bounding rect
+        Color c = new Color(Display.getDefault(), 255, 255, 255);
+        graphics.setBackgroundColor(c);
+        graphics.setForegroundColor(c);
+        graphics.drawRectangle(area.x, area.y, area.width - 1, area.height - 1);
+        c.dispose();
     }
 
 }

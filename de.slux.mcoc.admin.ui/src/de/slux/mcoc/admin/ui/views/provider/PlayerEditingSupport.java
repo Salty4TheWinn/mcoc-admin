@@ -166,6 +166,9 @@ public class PlayerEditingSupport extends EditingSupport
                     pc.setId(this.champModel.get((Integer) value));
                     pc.setName(AWDDataUIModelManager.getInstance().getChampionModel().get(pc.getId()).getName());
                     this.viewer.update(element, null);
+                    
+                    // Update the other views
+                    AWDDataUIModelManager.getInstance().forceViewsUpdate();
                 }
             }
 
@@ -195,7 +198,7 @@ public class PlayerEditingSupport extends EditingSupport
                     int sigLevValue = Integer.parseInt(sigLevInput);
                     if (sigLevValue < 0 || sigLevValue > 200)
                     {
-                        // TODO: error in the gui somewhere
+                        // TODO: error in the gui (status bar)
                     }
                     else
                     {

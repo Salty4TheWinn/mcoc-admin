@@ -171,6 +171,11 @@ public class TeamExplorerContentProvider implements ITreeContentProvider, DataMo
 
     }
 
+    @Override
+    public void updateView()
+    {
+    }
+
     /*
      * @Override public void newObjectAdded(final SubSystemModelItem parent,
      * final AgentModelItem newChild) { Display.getDefault().asyncExec(new

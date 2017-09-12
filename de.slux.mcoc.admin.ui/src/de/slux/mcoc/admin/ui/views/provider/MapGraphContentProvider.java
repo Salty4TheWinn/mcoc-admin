@@ -115,4 +115,10 @@ public class MapGraphContentProvider implements IGraphEntityContentProvider, ICo
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void updateView()
+    {
+        modelChanged();
+    }
 }

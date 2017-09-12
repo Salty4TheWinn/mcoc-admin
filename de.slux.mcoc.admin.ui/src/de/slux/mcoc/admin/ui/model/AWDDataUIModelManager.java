@@ -11,11 +11,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.w3c.dom.Node;
+
 import de.slux.mcoc.admin.data.model.Champion;
 import de.slux.mcoc.admin.data.model.McocDataManager;
 import de.slux.mcoc.admin.ui.model.MapLink.MapLinkType;
 import de.slux.mcoc.admin.ui.model.NodeId.NodeType;
 import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
+import de.slux.mcoc.admin.ui.views.layouts.NodeCellPosition;
 
 /**
  * Data UI Model Manager
@@ -24,15 +27,15 @@ import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
  */
 public class AWDDataUIModelManager
 {
-    //private static final int TOTAL_AW_MAP_CHAMP_NODES = 55;
-    //private static final int TOTAL_AW_MAP_PORTAL_NODES = 21;
-    //private static final int TOTAL_AW_MAP_EMPTY_NODES = 22;
+    private static final int TOTAL_AW_MAP_CHAMP_NODES = 55;
+    private static final int TOTAL_AW_MAP_PORTAL_NODES = 21;
+    private static final int TOTAL_AW_MAP_EMPTY_NODES = 22;
 
     // TESTING
-    private static final int TOTAL_AW_MAP_CHAMP_NODES = 3;
-    private static final int TOTAL_AW_MAP_PORTAL_NODES = 1;
-    private static final int TOTAL_AW_MAP_EMPTY_NODES = 2;
-    
+    // private static final int TOTAL_AW_MAP_CHAMP_NODES = 3;
+    // private static final int TOTAL_AW_MAP_PORTAL_NODES = 1;
+    // private static final int TOTAL_AW_MAP_EMPTY_NODES = 2;
+
     private static final Logger LOG = Logger.getLogger(AWDDataUIModelManager.class.getName());
     private static AWDDataUIModelManager INSTANCE = new AWDDataUIModelManager();
 
@@ -41,12 +44,14 @@ public class AWDDataUIModelManager
     private Map<String, Champion> championModel;
     private Map<NodeId, MapNode> awMapNodes;
     private List<MapLink> awMapLinks;
+    private Map<NodeId, NodeCellPosition> awMapNodesPositions;
 
     /**
      * Private singleton constructor
      */
     private AWDDataUIModelManager() {
         this.modelChangeListeners = new CopyOnWriteArrayList<DataModelChangedListener>();
+        this.awMapNodesPositions = new HashMap<>();
         this.teamModel = new Team();
 
         try
@@ -84,8 +89,36 @@ public class AWDDataUIModelManager
 
         this.awMapLinks = new ArrayList<>();
 
-        //setupAwMapNodeLinks();
-        setupAwMapTestNodeLinks();
+        setupAwMapNodeLinks();
+        // setupAwMapTestNodeLinks();
+
+        setupAwMapNodePositions();
+
+    }
+
+    private void setupAwMapNodePositions()
+    {
+        // Middle south (beginning)
+        addPos(NodeType.EmptyNode, 0, 18, 12);
+        addPos(NodeType.PortalNode, 12, 18, 11);
+        addPos(NodeType.PortalNode, 15, 18, 13);
+        addPos(NodeType.PortalNode, 14, 17, 12);
+        
+        // South west (beginning)
+        addPos(NodeType.EmptyNode, 1, 17, 3);
+        addPos(NodeType.EmptyNode, 2, 17, 7);
+        addPos(NodeType.ChampionNode, 1, 15, 3);
+        addPos(NodeType.ChampionNode, 2, 15, 5);
+        addPos(NodeType.ChampionNode, 3, 15, 7);
+        addPos(NodeType.PortalNode, 3, 13, 3);
+        addPos(NodeType.PortalNode, 6, 13, 5);
+        addPos(NodeType.PortalNode, 7, 13, 7);
+
+    }
+
+    private void addPos(NodeType type, int nodeNumber, int row, int column)
+    {
+        this.awMapNodesPositions.put(new NodeId(type, nodeNumber), new NodeCellPosition(row, column));
 
     }
 
@@ -310,6 +343,24 @@ public class AWDDataUIModelManager
     public List<MapLink> getAwMapLinks()
     {
         return awMapLinks;
+    }
+
+    /**
+     * Force the update of the views
+     */
+    public void forceViewsUpdate()
+    {
+        for (DataModelChangedListener l : this.modelChangeListeners)
+            l.modelChanged();
+
+    }
+
+    /**
+     * Get the awMapNodesPositions
+     */
+    public Map<NodeId, NodeCellPosition> getAwMapNodesPositions()
+    {
+        return this.awMapNodesPositions;
     }
 
     /**

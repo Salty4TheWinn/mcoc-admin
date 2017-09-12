@@ -9,8 +9,10 @@ import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Display;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.EmptyNode;
@@ -62,6 +64,12 @@ public class EmptyNodeFigure extends ImageFigure
         graphics.drawImage(EMPTY_NODE_IMAGE, EMPTY_NODE_IMAGE.getBounds().x, EMPTY_NODE_IMAGE.getBounds().y,
                 EMPTY_NODE_IMAGE.getBounds().width, EMPTY_NODE_IMAGE.getBounds().height, area.x, area.y, WIDTH, HEIGHT);
 
+        // Debug bounding rect
+        Color c = new Color(Display.getDefault(), 255, 255, 255);
+        graphics.setBackgroundColor(c);
+        graphics.setForegroundColor(c);
+        graphics.drawRectangle(area.x, area.y, area.width - 1, area.height - 1);
+        c.dispose();
     }
 
     /**

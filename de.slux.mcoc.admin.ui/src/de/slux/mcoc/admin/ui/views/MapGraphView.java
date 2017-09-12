@@ -11,7 +11,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -35,7 +34,9 @@ import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
+import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
 import de.slux.mcoc.admin.ui.views.dndSupport.ChampionDropListener;
+import de.slux.mcoc.admin.ui.views.layouts.MapGridLayout;
 import de.slux.mcoc.admin.ui.views.provider.MapGraphContentProvider;
 import de.slux.mcoc.admin.ui.views.provider.MapGraphLabelProvider;
 
@@ -69,6 +70,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         graphViewer.setNodeStyle(ZestStyles.NODES_CACHE_LABEL | ZestStyles.NODES_NO_ANIMATION);
         graphViewer.setInput(MapGraphContentProvider.getInitialInput());
         graphViewer.getControl().setBackground(BG_COLOR);
+        graphViewer.getGraphControl().setBounds(0,  0, 1000, 1000);
 
         // D&D SUpport
         int operations = DND.DROP_COPY | DND.DROP_MOVE;
@@ -210,7 +212,8 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         //RadialLayoutAlgorithm algorithm = new RadialLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
          //GridLayoutAlgorithm gridAlgorithm = new
          //GridLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-        TreeLayoutAlgorithm algorithm = new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+        //TreeLayoutAlgorithm algorithm = new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
+        MapGridLayout algorithm = new MapGridLayout(LayoutStyles.NO_LAYOUT_NODE_RESIZING, 19, 23, AWDDataUIModelManager.getInstance().getAwMapNodes(), AWDDataUIModelManager.getInstance().getAwMapNodesPositions());
         /*
          * CompositeLayoutAlgorithm compositeAlgorithm = new
          * CompositeLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING, new
@@ -219,6 +222,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
          * new HorizontalShift(LayoutStyles.NO_LAYOUT_NODE_RESIZING) });
          */
         graphViewer.setLayoutAlgorithm(algorithm, true);
+        MapGraphView.this.graphViewer.refresh();
     }
 
     /**

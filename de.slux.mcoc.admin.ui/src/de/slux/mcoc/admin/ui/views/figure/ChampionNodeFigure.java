@@ -31,8 +31,8 @@ public class ChampionNodeFigure extends ImageFigure
 {
     private static final Image CHAMPION_NODE_IMAGE = McocAdminUiPlugin
             .getImageDescriptor("icons/generic/champion_node.png").createImage();
-    private static final int WIDTH = 46;
-    private static final int HEIGHT = 58;
+    public static final int WIDTH = 46;
+    public static final int HEIGHT = 58;
     private static final Image EMPTY_IMAGE;
     private static final Color NODE_NUMBER_BG_COLOR = new Color(Display.getCurrent(), 255, 171, 15);
     private static final Color NODE_NUMBER_FG_COLOR = new Color(Display.getCurrent(), 0, 0, 0);
@@ -87,7 +87,8 @@ public class ChampionNodeFigure extends ImageFigure
         // Background image every time. This will print it scaled correctly to
         // the zoom level
         graphics.drawImage(CHAMPION_NODE_IMAGE, CHAMPION_NODE_IMAGE.getBounds().x, CHAMPION_NODE_IMAGE.getBounds().y,
-                CHAMPION_NODE_IMAGE.getBounds().width, CHAMPION_NODE_IMAGE.getBounds().height, area.x, area.y, WIDTH, HEIGHT);
+                CHAMPION_NODE_IMAGE.getBounds().width, CHAMPION_NODE_IMAGE.getBounds().height, area.x, area.y, WIDTH,
+                HEIGHT);
 
         // Add the champion if any
         if (this.node.getPlayerChampion() != null)
@@ -113,6 +114,12 @@ public class ChampionNodeFigure extends ImageFigure
         graphics.fillText(this.node.getNodeId().getNodeNumber().toString(), area.x + area.width - fontWidth,
                 area.y + area.height - fontMetrics.getHeight());
 
+        // Debug bounding rect
+        Color c = new Color(Display.getDefault(), 255, 255, 255);
+        graphics.setBackgroundColor(c);
+        graphics.setForegroundColor(c);
+        graphics.drawRectangle(area.x, area.y, area.width - 1, area.height - 1);
+        c.dispose();
     }
 
     /**

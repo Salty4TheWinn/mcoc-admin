@@ -22,4 +22,9 @@ public interface DataModelChangedListener
      */
     void newElement(Object parent, Object child);
 
+    /**
+     * Update the view without necessarily update the input model
+     */
+    void updateView();
+
 }
