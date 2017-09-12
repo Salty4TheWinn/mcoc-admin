@@ -99,6 +99,9 @@ public class ChampionDropListener extends ViewerDropAdapter
                     // Found it.
                     Objects.requireNonNull(this.lastDroppedNode).setPlayerChampion(pc);
                     System.out.println("DROPPED on " + this.lastDroppedNode);
+
+                    // Refresh the view
+                    getViewer().refresh();
                 }
             }
         }

@@ -146,6 +146,13 @@ public class TeamExplorerContentProvider implements ITreeContentProvider, DataMo
         });
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener#newElement(
+     * java.lang.Object, java.lang.Object)
+     */
     @Override
     public void newElement(Object parent, Object child)
     {

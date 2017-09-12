@@ -204,7 +204,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
     /**
      * Apply a layout to the graph view
      */
-    private void applyLayout()
+    public void applyLayout()
     {
         //SpringLayoutAlgorithm algorithm = new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
         //RadialLayoutAlgorithm algorithm = new RadialLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);

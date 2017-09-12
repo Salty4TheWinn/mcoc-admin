@@ -14,6 +14,12 @@ public interface DataModelChangedListener
      */
     void modelChanged();
 
+    /**
+     * New element has been added to the model
+     * 
+     * @param parent
+     * @param child
+     */
     void newElement(Object parent, Object child);
 
 }

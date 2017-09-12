@@ -104,7 +104,7 @@ public class MapGraphContentProvider implements IGraphEntityContentProvider, ICo
             public void run()
             {
                 if (!MapGraphContentProvider.this.viewer.getControl().isDisposed())
-                    MapGraphContentProvider.this.viewer.setInput(getInitialInput());
+                    MapGraphContentProvider.this.viewer.refresh();
             }
         });
     }
