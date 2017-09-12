@@ -14,6 +14,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,9 +23,10 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
+import de.slux.mcoc.admin.data.model.Boost;
 import de.slux.mcoc.admin.data.model.Champion;
 import de.slux.mcoc.admin.data.model.Champion.ChampionClass;
-import de.slux.mcoc.admin.data.model.ChampionManager;
+import de.slux.mcoc.admin.data.model.McocDataManager;
 
 /**
  * @author Slux
@@ -34,7 +36,7 @@ public class SyncDataTool
     // TODO: deal with boosts and map using the following
     // http://mcoc.dyndns.org/aw/js/aw_s2_advanced_9path.json
     // http://mcoc.dyndns.org/global/ui/js/booster.js
-    
+
     /**
      * @param args
      */
@@ -43,16 +45,65 @@ public class SyncDataTool
     {
         System.out.println("<I> Getting data.");
 
-        String championsJsonText = getUrlContentText(ChampionManager.CHAMPIONS_NAMES_JSON_URL);
+        String championsJsonText = getUrlContentText(McocDataManager.CHAMPIONS_NAMES_JSON_URL);
         Gson gson = new Gson();
 
+        // We retrieve the node boost list
+        System.out.println("<I> Extracting boost node data");
+        String boostsJsonText = getUrlContentText(McocDataManager.BOOSTS_NODES_URL);
+        // Cleanup
+        boostsJsonText = boostsJsonText.replace("var booster = ", "");
+
+        Object boostsData = gson.fromJson(boostsJsonText, Object.class);
+
+        LinkedTreeMap<String, Object> boosts = (LinkedTreeMap<String, Object>) boostsData;
+        Map<String, Boost> boostModel = new HashMap<>();
+        for (Entry<String, Object> entry : boosts.entrySet())
+        {
+            String boostId = entry.getKey();
+            LinkedTreeMap<String, String> entryDetails = (LinkedTreeMap<String, String>) entry.getValue();
+            String boostImage = entryDetails.get("img");
+            String boostTitle = entryDetails.get("title");
+            String boostDescription = entryDetails.get("text");
+
+            System.out.println("ID=" + boostId + "(" + boostImage + ")");
+            System.out.println("    TITLE=" + boostTitle);
+            System.out.println("    TEXT= " + boostDescription);
+            System.out.println();
+            boostModel.put(boostId, new Boost(boostId, boostImage, boostTitle, boostDescription));
+
+            // Download the boost icon
+            // http://mcoc.dyndns.org/global/ui/images/booster/
+            try
+            {
+                saveUrl2File(McocDataManager.BOOST_IMAGES_BASE_DIR_URL + boostImage + ".png", boostImage + ".png",
+                        McocDataManager.BOOSTS_IMG_DIR);
+            }
+            catch (Exception e)
+            {
+                System.err.println("<E> Boost image not found for ID " + boostImage);
+            }
+
+        }
+
+        // Serialise champions database
+        System.out.println("<I> Serialising boost database to " + McocDataManager.BOOSTS_LIST_DB);
+        FileOutputStream fout = new FileOutputStream(McocDataManager.BOOSTS_LIST_DB);
+        ObjectOutputStream oos = new ObjectOutputStream(fout);
+        oos.writeObject(boostModel);
+        oos.close();
+
+        System.out.println("<I> Boost node data extracted.");
+
+        if (1 == 1)
+            System.exit(0);
         Type type = new TypeToken<Map<String, String>>()
         {
         }.getType();
 
         Map<String, String> champions = gson.fromJson(championsJsonText, type);
-        String championsImgJsonText = getUrlContentText(ChampionManager.CHAMPIONS_DATA_JSON_URL);
-        String championClassesText = getUrlContentText(ChampionManager.CHAMPIONS_INFO_JSON_URL);
+        String championsImgJsonText = getUrlContentText(McocDataManager.CHAMPIONS_DATA_JSON_URL);
+        String championClassesText = getUrlContentText(McocDataManager.CHAMPIONS_INFO_JSON_URL);
         Object championsData = gson.fromJson(championsImgJsonText, Object.class);
 
         System.out.println("<I> Got all the data.");
@@ -93,7 +144,7 @@ public class SyncDataTool
                     continue;
                 }
 
-                saveUrl2File(downloadPortraitUrl, champId + ".png");
+                saveUrl2File(downloadPortraitUrl, champId + ".png", McocDataManager.CHAMPIONS_IMG_DIR);
 
                 /*
                  * System.out.println(champId); System.out.println(champName);
@@ -109,13 +160,13 @@ public class SyncDataTool
         }
 
         // Serialise champions database
-        System.out.println("<I> Serialising champions database to " + ChampionManager.CHAMPIONS_DB);
-        FileOutputStream fout = new FileOutputStream(ChampionManager.CHAMPIONS_DB);
-        ObjectOutputStream oos = new ObjectOutputStream(fout);
+        System.out.println("<I> Serialising champions database to " + McocDataManager.CHAMPIONS_DB);
+        fout = new FileOutputStream(McocDataManager.CHAMPIONS_DB);
+        oos = new ObjectOutputStream(fout);
         oos.writeObject(championsDatabase);
         oos.close();
 
-        System.out.println("<I> All done. Parsed " + championsDatabase.size() + " champion(s)");
+        System.out.println("<I> Champion database built done. Parsed " + championsDatabase.size() + " champion(s)");
     }
 
     public static String getUrlContentText(String url) throws Exception
@@ -132,14 +183,14 @@ public class SyncDataTool
         return sb.toString();
     }
 
-    public static void saveUrl2File(String url, String outputFileName) throws Exception
+    public static void saveUrl2File(String url, String outputFileName, String baseFolder) throws Exception
     {
         FileOutputStream fos = null;
         try
         {
             URL fileUrl = new URL(url);
             ReadableByteChannel rbc = Channels.newChannel(fileUrl.openStream());
-            fos = new FileOutputStream(ChampionManager.CHAMPIONS_IMG_DIR + File.separator + outputFileName);
+            fos = new FileOutputStream(baseFolder + File.separator + outputFileName);
             fos.getChannel().transferFrom(rbc, 0, 1 << 24);
         }
         finally

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.slux.mcoc.admin.data.model.Champion;
-import de.slux.mcoc.admin.data.model.ChampionManager;
+import de.slux.mcoc.admin.data.model.McocDataManager;
 import de.slux.mcoc.admin.ui.model.MapLink.MapLinkType;
 import de.slux.mcoc.admin.ui.model.NodeId.NodeType;
 import de.slux.mcoc.admin.ui.model.listener.DataModelChangedListener;
@@ -51,7 +51,7 @@ public class AWDDataUIModelManager
 
         try
         {
-            this.championModel = new ChampionManager().getChampionData();
+            this.championModel = new McocDataManager().getChampionData();
         }
         catch (Exception e)
         {

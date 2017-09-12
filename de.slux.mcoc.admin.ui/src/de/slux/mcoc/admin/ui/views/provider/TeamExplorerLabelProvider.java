@@ -13,7 +13,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
-import de.slux.mcoc.admin.data.model.ChampionManager;
+import de.slux.mcoc.admin.data.model.McocDataManager;
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.Player;
 import de.slux.mcoc.admin.ui.model.PlayerChampion;
@@ -198,8 +198,8 @@ public class TeamExplorerLabelProvider extends ColumnLabelProvider
         gc.setInterpolation(SWT.HIGH);
         if (pc.getId() != null)
         {
-            Image champImg = McocAdminUiPlugin.getImageDescriptor(ChampionManager.BUNDLE_ID,
-                    ChampionManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
+            Image champImg = McocAdminUiPlugin.getImageDescriptor(McocDataManager.BUNDLE_ID,
+                    McocDataManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
             gc.drawImage(champImg, 0, 0, champImg.getBounds().width, champImg.getBounds().height, 0, 0, width, height);
             champImg.dispose();
         }

@@ -18,7 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
-import de.slux.mcoc.admin.data.model.ChampionManager;
+import de.slux.mcoc.admin.data.model.McocDataManager;
 import de.slux.mcoc.admin.ui.McocAdminUiPlugin;
 import de.slux.mcoc.admin.ui.model.ChampionNode;
 import de.slux.mcoc.admin.ui.model.PlayerChampion;
@@ -93,8 +93,8 @@ public class ChampionNodeFigure extends ImageFigure
         if (this.node.getPlayerChampion() != null)
         {
             PlayerChampion pc = this.node.getPlayerChampion();
-            Image champImg = McocAdminUiPlugin.getImageDescriptor(ChampionManager.BUNDLE_ID,
-                    ChampionManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
+            Image champImg = McocAdminUiPlugin.getImageDescriptor(McocDataManager.BUNDLE_ID,
+                    McocDataManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
 
             graphics.drawImage(champImg, champImg.getBounds().x, champImg.getBounds().y, champImg.getBounds().width,
                     champImg.getBounds().height, area.x + 8, area.y + 5, 28, 28);
