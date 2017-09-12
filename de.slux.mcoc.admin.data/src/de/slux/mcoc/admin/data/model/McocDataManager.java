@@ -21,8 +21,10 @@ public class McocDataManager
     public static final String CHAMPIONS_IMG_DIR = "data/images/champions";
 
     public static final String BOOSTS_NODES_URL = "http://mcoc.dyndns.org/global/ui/js/booster.js";
+    public static final String BOOSTS_NODES_APPLIED_URL = "http://mcoc.dyndns.org/aw/js/aw_s2_advanced_9path.json";
     public static final String BOOST_IMAGES_BASE_DIR_URL = "http://mcoc.dyndns.org/global/ui/images/booster/";
     public static final String BOOSTS_LIST_DB = "data/boosts.dat";
+    public static final String BOOST_NODE_LIST_DB = "data/boost_nodes.dat";
     public static final String BOOSTS_IMG_DIR = "data/images/boosts";
 
     public static final String BUNDLE_ID = "de.slux.mcoc.admin.data";

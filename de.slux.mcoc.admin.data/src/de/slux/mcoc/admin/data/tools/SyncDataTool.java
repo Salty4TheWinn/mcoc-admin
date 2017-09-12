@@ -13,6 +13,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -66,10 +68,10 @@ public class SyncDataTool
             String boostTitle = entryDetails.get("title");
             String boostDescription = entryDetails.get("text");
 
-            System.out.println("ID=" + boostId + "(" + boostImage + ")");
-            System.out.println("    TITLE=" + boostTitle);
-            System.out.println("    TEXT= " + boostDescription);
-            System.out.println();
+            // System.out.println("ID=" + boostId + "(" + boostImage + ")");
+            // System.out.println(" TITLE=" + boostTitle);
+            // System.out.println(" TEXT= " + boostDescription);
+            // System.out.println();
             boostModel.put(boostId, new Boost(boostId, boostImage, boostTitle, boostDescription));
 
             // Download the boost icon
@@ -86,7 +88,7 @@ public class SyncDataTool
 
         }
 
-        // Serialise champions database
+        // Serialise boost database
         System.out.println("<I> Serialising boost database to " + McocDataManager.BOOSTS_LIST_DB);
         FileOutputStream fout = new FileOutputStream(McocDataManager.BOOSTS_LIST_DB);
         ObjectOutputStream oos = new ObjectOutputStream(fout);
@@ -95,8 +97,40 @@ public class SyncDataTool
 
         System.out.println("<I> Boost node data extracted.");
 
-        if (1 == 1)
-            System.exit(0);
+        String boostNodesJsonText = getUrlContentText(McocDataManager.BOOSTS_NODES_APPLIED_URL);
+
+        Object boostNodesData = gson.fromJson(boostNodesJsonText, Object.class);
+        LinkedTreeMap<String, Object> boostNodes = (LinkedTreeMap<String, Object>) boostNodesData;
+
+        Object boostNode = boostNodes.get("boosts");
+        LinkedTreeMap<String, ArrayList<String>> boostNodeDetails = (LinkedTreeMap<String, ArrayList<String>>) boostNode;
+        Map<String, List<Boost>> nodeBoostModel = new Hashtable<>();
+        for (Entry<String, ArrayList<String>> entry : boostNodeDetails.entrySet())
+        {
+            List<Boost> usedBoosts = new ArrayList<>();
+            for (String boostId : entry.getValue())
+            {
+                Boost boost = boostModel.get(boostId);
+                if (boost == null)
+                {
+                    System.err.println("<E> cannot find boost with ID " + boostId);
+                    continue;
+                }
+
+                usedBoosts.add(boost);
+
+            }
+
+            nodeBoostModel.put(entry.getKey(), usedBoosts);
+        }
+
+        // Serialise boost nodes database
+        System.out.println("<I> Serialising boost nodes database to " + McocDataManager.BOOST_NODE_LIST_DB);
+        fout = new FileOutputStream(McocDataManager.BOOST_NODE_LIST_DB);
+        oos = new ObjectOutputStream(fout);
+        oos.writeObject(nodeBoostModel);
+        oos.close();
+
         Type type = new TypeToken<Map<String, String>>()
         {
         }.getType();
