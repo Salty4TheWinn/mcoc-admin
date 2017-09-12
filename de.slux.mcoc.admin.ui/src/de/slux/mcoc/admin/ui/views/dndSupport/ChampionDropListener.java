@@ -18,6 +18,7 @@ import org.eclipse.zest.core.widgets.Graph;
 import de.slux.mcoc.admin.ui.model.AWDDataUIModelManager;
 import de.slux.mcoc.admin.ui.model.ChampionNode;
 import de.slux.mcoc.admin.ui.model.MapNode;
+import de.slux.mcoc.admin.ui.model.NodeId.NodeType;
 import de.slux.mcoc.admin.ui.model.Player;
 import de.slux.mcoc.admin.ui.model.PlayerChampion;
 import de.slux.mcoc.admin.ui.views.figure.ChampionNodeFigure;
@@ -89,7 +90,24 @@ public class ChampionDropListener extends ViewerDropAdapter
         String playerChampionUniqueId = data.toString();
         System.out.println("Drop performed: " + playerChampionUniqueId);
 
+        // We have to make sure that the dropped champion wasn't
+        // already somewhere else placed. If so, we remove from the
+        // previous node
+        for (MapNode p : AWDDataUIModelManager.getInstance().getAwMapNodes())
+        {
+            if (p.getNodeId().getType() == NodeType.ChampionNode)
+            {
+                ChampionNode cn = (ChampionNode) p;
+                if (cn.getPlayerChampion() != null
+                        && cn.getPlayerChampion().getUniqueId().equals(playerChampionUniqueId))
+                {
+                    cn.setPlayerChampion(null);
+                }
+            }
+        }
+
         // Let's look for this champion and attach it to the target
+        boolean found = false;
         for (Player p : AWDDataUIModelManager.getInstance().getTeamModel().getPlayers())
         {
             for (PlayerChampion pc : p.getChampions())
@@ -99,12 +117,14 @@ public class ChampionDropListener extends ViewerDropAdapter
                     // Found it.
                     Objects.requireNonNull(this.lastDroppedNode).setPlayerChampion(pc);
                     System.out.println("DROPPED on " + this.lastDroppedNode);
-
-                    // Refresh the view
-                    getViewer().refresh();
+                    found = true;
                 }
             }
         }
+
+        // Refresh the view
+        if (found)
+            getViewer().refresh();
 
         this.lastDroppedNode = null;
         return true;
