@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.zest.layouts.algorithms.AbstractLayoutAlgorithm;
 import org.eclipse.zest.layouts.dataStructures.InternalNode;
 import org.eclipse.zest.layouts.dataStructures.InternalRelationship;
@@ -15,7 +14,6 @@ import org.eclipse.zest.layouts.dataStructures.InternalRelationship;
 import de.slux.mcoc.admin.ui.model.MapNode;
 import de.slux.mcoc.admin.ui.model.NodeId;
 import de.slux.mcoc.admin.ui.model.NodeId.NodeType;
-import de.slux.mcoc.admin.ui.views.TeamExplorerView;
 import de.slux.mcoc.admin.ui.views.figure.ChampionNodeFigure;
 
 /**
@@ -60,7 +58,15 @@ public class MapGridLayout extends AbstractLayoutAlgorithm
     {
         double rowSize = boundsHeight / this.rows;
         double colSize = boundsWidth / this.columns;
-
+        
+        // set a minimum so that we force the scroll bars keeping the map
+        // nicely drown
+        /*
+        if (rowSize < ChampionNodeFigure.HEIGHT)
+            rowSize = ChampionNodeFigure.HEIGHT;
+        if (colSize < ChampionNodeFigure.WIDTH)
+            colSize = ChampionNodeFigure.WIDTH;
+         */
         for (InternalNode node : entitiesToLayout)
         {
             // Zest sucks, we need to find the data in the model using this hack
@@ -69,14 +75,18 @@ public class MapGridLayout extends AbstractLayoutAlgorithm
             NodeCellPosition cellPos = this.positionModel.get(mapNode.getNodeId());
             if (cellPos != null)
             {
-                double fixAlign = 0;
-                // We align things in the middle
+                // We align smaller figures in the middle (vertically &
+                // horizontally)
+                double fixAlignVertical = 0;
+                double fixAlignHorizontal = 0;
                 if (!mapNode.getNodeId().getType().equals(NodeType.ChampionNode))
                 {
-                    fixAlign = (ChampionNodeFigure.WIDTH / 2) - (node.getWidthInLayout() / 2);
+                    fixAlignHorizontal = (ChampionNodeFigure.WIDTH / 2) - (node.getWidthInLayout() / 2);
+                    fixAlignVertical = (ChampionNodeFigure.HEIGHT / 2) - (node.getHeightInLayout() / 2);
                 }
-                
-                node.setLocation(cellPos.getCol() * colSize + fixAlign, cellPos.getRow() * rowSize);
+
+                node.setLocation((cellPos.getCol() * colSize) + fixAlignHorizontal,
+                        (cellPos.getRow() * rowSize) + fixAlignVertical);
             }
 
         }

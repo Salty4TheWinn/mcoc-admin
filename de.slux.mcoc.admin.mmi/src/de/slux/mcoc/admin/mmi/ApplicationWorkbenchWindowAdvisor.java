@@ -66,7 +66,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor
     {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 
-        Point windowSize = new Point(800, 600);
+        Point windowSize = new Point(1400, 900);
 
         configurer.setInitialSize(windowSize);
 

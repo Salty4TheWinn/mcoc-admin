@@ -3,15 +3,11 @@ package de.slux.mcoc.admin.ui.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.w3c.dom.Node;
 
 import de.slux.mcoc.admin.data.model.Champion;
 import de.slux.mcoc.admin.data.model.McocDataManager;
@@ -29,7 +25,7 @@ public class AWDDataUIModelManager
 {
     private static final int TOTAL_AW_MAP_CHAMP_NODES = 55;
     private static final int TOTAL_AW_MAP_PORTAL_NODES = 21;
-    private static final int TOTAL_AW_MAP_EMPTY_NODES = 22;
+    private static final int TOTAL_AW_MAP_EMPTY_NODES = 23;
 
     // TESTING
     // private static final int TOTAL_AW_MAP_CHAMP_NODES = 3;
@@ -96,23 +92,36 @@ public class AWDDataUIModelManager
 
     }
 
+    /**
+     * Based on a grid composed by 51 rows and 41 columns
+     */
     private void setupAwMapNodePositions()
     {
         // Middle south (beginning)
-        addPos(NodeType.EmptyNode, 0, 18, 12);
-        addPos(NodeType.PortalNode, 12, 18, 11);
-        addPos(NodeType.PortalNode, 15, 18, 13);
-        addPos(NodeType.PortalNode, 14, 17, 12);
-        
+        addPos(NodeType.EmptyNode, 0, 48, 21);
+        addPos(NodeType.PortalNode, 12, 48, 18);
+        addPos(NodeType.PortalNode, 15, 48, 24);
+        addPos(NodeType.PortalNode, 14, 45, 21);
+
         // South west (beginning)
-        addPos(NodeType.EmptyNode, 1, 17, 3);
-        addPos(NodeType.EmptyNode, 2, 17, 7);
-        addPos(NodeType.ChampionNode, 1, 15, 3);
-        addPos(NodeType.ChampionNode, 2, 15, 5);
-        addPos(NodeType.ChampionNode, 3, 15, 7);
-        addPos(NodeType.PortalNode, 3, 13, 3);
-        addPos(NodeType.PortalNode, 6, 13, 5);
-        addPos(NodeType.PortalNode, 7, 13, 7);
+        addPos(NodeType.EmptyNode, 1, 44, 1);
+        addPos(NodeType.ChampionNode, 1, 40, 1);
+        addPos(NodeType.PortalNode, 3, 36, 1);
+        addPos(NodeType.ChampionNode, 2, 40, 4);
+        addPos(NodeType.PortalNode, 6, 36, 4);
+        addPos(NodeType.EmptyNode, 2, 44, 7);
+        addPos(NodeType.ChampionNode, 3, 40, 7);
+        addPos(NodeType.PortalNode, 7, 36, 7);
+        addPos(NodeType.EmptyNode, 4, 32, 1);
+        addPos(NodeType.EmptyNode, 5, 32, 7);
+
+        // North middle (bosses)
+        addPos(NodeType.ChampionNode, 54, 1, 21);
+        addPos(NodeType.ChampionNode, 53, 1, 18);
+        addPos(NodeType.ChampionNode, 55, 1, 24);
+        addPos(NodeType.EmptyNode, 23, 6, 21);
+        addPos(NodeType.ChampionNode, 51, 6, 18);
+        addPos(NodeType.ChampionNode, 52, 6, 24);
 
     }
 
@@ -169,6 +178,7 @@ public class AWDDataUIModelManager
         connectNode(new NodeId(NodeType.EmptyNode, 20), new NodeId[] { new NodeId(NodeType.ChampionNode, 52) });
         connectNode(new NodeId(NodeType.EmptyNode, 21), new NodeId[] { new NodeId(NodeType.ChampionNode, 53) });
         connectNode(new NodeId(NodeType.EmptyNode, 22), new NodeId[] { new NodeId(NodeType.ChampionNode, 55) });
+        connectNode(new NodeId(NodeType.EmptyNode, 23), new NodeId[] { new NodeId(NodeType.ChampionNode, 54) });
 
         // Portal node links
         connectNode(new NodeId(NodeType.PortalNode, 1), new NodeId[] { new NodeId(NodeType.EmptyNode, 9) });
@@ -209,6 +219,70 @@ public class AWDDataUIModelManager
         connectNode(new NodeId(NodeType.PortalNode, 21),
                 new NodeId[] { new NodeId(NodeType.EmptyNode, 20), new NodeId(NodeType.EmptyNode, 22) });
 
+        // Champion nodes
+        connectNode(new NodeId(NodeType.ChampionNode, 1),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 2), new NodeId(NodeType.PortalNode, 3) });
+        connectNode(new NodeId(NodeType.ChampionNode, 2),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 3), new NodeId(NodeType.PortalNode, 6) });
+        connectNode(new NodeId(NodeType.ChampionNode, 3), new NodeId[] { new NodeId(NodeType.PortalNode, 7) });
+        connectNode(new NodeId(NodeType.ChampionNode, 4), new NodeId[] { new NodeId(NodeType.ChampionNode, 7) });
+        connectNode(new NodeId(NodeType.ChampionNode, 5), new NodeId[] { new NodeId(NodeType.ChampionNode, 8) });
+        connectNode(new NodeId(NodeType.ChampionNode, 6), new NodeId[] { new NodeId(NodeType.ChampionNode, 9) });
+        connectNode(new NodeId(NodeType.ChampionNode, 7), new NodeId[] { new NodeId(NodeType.ChampionNode, 13) });
+        connectNode(new NodeId(NodeType.ChampionNode, 8), new NodeId[] { new NodeId(NodeType.ChampionNode, 14) });
+        connectNode(new NodeId(NodeType.ChampionNode, 9), new NodeId[] { new NodeId(NodeType.ChampionNode, 15) });
+        connectNode(new NodeId(NodeType.ChampionNode, 10), new NodeId[] { new NodeId(NodeType.ChampionNode, 16) });
+        connectNode(new NodeId(NodeType.ChampionNode, 11), new NodeId[] { new NodeId(NodeType.ChampionNode, 17) });
+        connectNode(new NodeId(NodeType.ChampionNode, 12), new NodeId[] { new NodeId(NodeType.ChampionNode, 18) });
+        connectNode(new NodeId(NodeType.ChampionNode, 13), new NodeId[] { new NodeId(NodeType.ChampionNode, 14) });
+        connectNode(new NodeId(NodeType.ChampionNode, 14),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 15), new NodeId(NodeType.PortalNode, 20) });
+        connectNode(new NodeId(NodeType.ChampionNode, 15), new NodeId[] {});
+        connectNode(new NodeId(NodeType.ChampionNode, 16), new NodeId[] { new NodeId(NodeType.ChampionNode, 23) });
+        connectNode(new NodeId(NodeType.ChampionNode, 17), new NodeId[] { new NodeId(NodeType.ChampionNode, 22) });
+        connectNode(new NodeId(NodeType.ChampionNode, 18), new NodeId[] { new NodeId(NodeType.ChampionNode, 24) });
+        connectNode(new NodeId(NodeType.ChampionNode, 19), new NodeId[] { new NodeId(NodeType.PortalNode, 1) });
+        connectNode(new NodeId(NodeType.ChampionNode, 20), new NodeId[] { new NodeId(NodeType.PortalNode, 2) });
+        connectNode(new NodeId(NodeType.ChampionNode, 21), new NodeId[] { new NodeId(NodeType.PortalNode, 4) });
+        connectNode(new NodeId(NodeType.ChampionNode, 22), new NodeId[] { new NodeId(NodeType.PortalNode, 11) });
+        connectNode(new NodeId(NodeType.ChampionNode, 23), new NodeId[] { new NodeId(NodeType.PortalNode, 13) });
+        connectNode(new NodeId(NodeType.ChampionNode, 24), new NodeId[] { new NodeId(NodeType.PortalNode, 17) });
+        connectNode(new NodeId(NodeType.ChampionNode, 25),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 26), new NodeId(NodeType.PortalNode, 5) });
+        connectNode(new NodeId(NodeType.ChampionNode, 26),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 27), new NodeId(NodeType.PortalNode, 5) });
+        connectNode(new NodeId(NodeType.ChampionNode, 27), new NodeId[] { new NodeId(NodeType.PortalNode, 5) });
+        connectNode(new NodeId(NodeType.ChampionNode, 28), new NodeId[] { new NodeId(NodeType.ChampionNode, 34) });
+        connectNode(new NodeId(NodeType.ChampionNode, 29),
+                new NodeId[] { new NodeId(NodeType.ChampionNode, 34), new NodeId(NodeType.ChampionNode, 35) });
+        connectNode(new NodeId(NodeType.ChampionNode, 30), new NodeId[] { new NodeId(NodeType.ChampionNode, 35) });
+        connectNode(new NodeId(NodeType.ChampionNode, 31), new NodeId[] { new NodeId(NodeType.ChampionNode, 38) });
+        connectNode(new NodeId(NodeType.ChampionNode, 32), new NodeId[] { new NodeId(NodeType.ChampionNode, 39) });
+        connectNode(new NodeId(NodeType.ChampionNode, 33), new NodeId[] { new NodeId(NodeType.ChampionNode, 40) });
+        connectNode(new NodeId(NodeType.ChampionNode, 34), new NodeId[] { new NodeId(NodeType.ChampionNode, 36) });
+        connectNode(new NodeId(NodeType.ChampionNode, 35), new NodeId[] { new NodeId(NodeType.ChampionNode, 37) });
+        connectNode(new NodeId(NodeType.ChampionNode, 36), new NodeId[] { new NodeId(NodeType.PortalNode, 10) });
+        connectNode(new NodeId(NodeType.ChampionNode, 37), new NodeId[] { new NodeId(NodeType.PortalNode, 16) });
+        connectNode(new NodeId(NodeType.ChampionNode, 38), new NodeId[] { new NodeId(NodeType.ChampionNode, 42) });
+        connectNode(new NodeId(NodeType.ChampionNode, 39), new NodeId[] { new NodeId(NodeType.ChampionNode, 43) });
+        connectNode(new NodeId(NodeType.ChampionNode, 40), new NodeId[] { new NodeId(NodeType.ChampionNode, 44) });
+        connectNode(new NodeId(NodeType.ChampionNode, 41), new NodeId[] { new NodeId(NodeType.ChampionNode, 45) });
+        connectNode(new NodeId(NodeType.ChampionNode, 42), new NodeId[] { new NodeId(NodeType.PortalNode, 18) });
+        connectNode(new NodeId(NodeType.ChampionNode, 43), new NodeId[] { new NodeId(NodeType.PortalNode, 19) });
+        connectNode(new NodeId(NodeType.ChampionNode, 44), new NodeId[] { new NodeId(NodeType.PortalNode, 21) });
+        connectNode(new NodeId(NodeType.ChampionNode, 45), new NodeId[] { new NodeId(NodeType.ChampionNode, 47) });
+        connectNode(new NodeId(NodeType.ChampionNode, 46), new NodeId[] { new NodeId(NodeType.ChampionNode, 49) });
+        connectNode(new NodeId(NodeType.ChampionNode, 47), new NodeId[] { new NodeId(NodeType.PortalNode, 9) });
+        connectNode(new NodeId(NodeType.ChampionNode, 48), new NodeId[] { new NodeId(NodeType.EmptyNode, 23) });
+        connectNode(new NodeId(NodeType.ChampionNode, 49), new NodeId[] { new NodeId(NodeType.ChampionNode, 50) });
+        connectNode(new NodeId(NodeType.ChampionNode, 50), new NodeId[] { new NodeId(NodeType.PortalNode, 8) });
+        connectNode(new NodeId(NodeType.ChampionNode, 51), new NodeId[] { new NodeId(NodeType.EmptyNode, 23) });
+        connectNode(new NodeId(NodeType.ChampionNode, 52), new NodeId[] { new NodeId(NodeType.EmptyNode, 23) });
+        connectNode(new NodeId(NodeType.ChampionNode, 53), new NodeId[] { new NodeId(NodeType.ChampionNode, 54) });
+        connectNode(new NodeId(NodeType.ChampionNode, 54), new NodeId[] {});
+        connectNode(new NodeId(NodeType.ChampionNode, 55), new NodeId[] { new NodeId(NodeType.ChampionNode, 54) });
+
+        // TODO: Boosts nodes
     }
 
     /**
@@ -240,10 +314,12 @@ public class AWDDataUIModelManager
             source.getConnections().add(destination);
 
             // Create the links
+            // Note, this first IF statement can't deal with boost links. Those
+            // must be added separately
             if (source.getNodeId().getType() == NodeType.ChampionNode
                     && destination.getNodeId().getType() == NodeType.ChampionNode)
             {
-                this.awMapLinks.add(new MapLink(MapLinkType.BoostLinkType, source, destination));
+                this.awMapLinks.add(new MapLink(MapLinkType.PathLinkType, source, destination));
             }
             else if (source.getNodeId().getType() == NodeType.EmptyNode
                     || source.getNodeId().getType() == NodeType.ChampionNode)

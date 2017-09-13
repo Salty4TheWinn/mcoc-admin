@@ -51,6 +51,9 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
     private static final ImageDescriptor REFRESH_ICON = McocAdminUiPlugin.getImageDescriptor("icons/refresh.png");
     private static final Color BG_COLOR = new Color(Display.getCurrent(), 93, 113, 145);
 
+    private static final int MAP_ROWS = 51;
+    private static final int MAP_COLUMNS = 41;
+
     private GraphViewer graphViewer;
     private ISelectionListener listener;
     private Action actionAcknowledgeAll;
@@ -68,9 +71,8 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
         graphViewer.setContentProvider(new MapGraphContentProvider(graphViewer));
         graphViewer.setLabelProvider(new MapGraphLabelProvider());
         graphViewer.setNodeStyle(ZestStyles.NODES_CACHE_LABEL | ZestStyles.NODES_NO_ANIMATION);
-        graphViewer.setInput(MapGraphContentProvider.getInitialInput());
         graphViewer.getControl().setBackground(BG_COLOR);
-        graphViewer.getGraphControl().setBounds(0,  0, 1000, 1000);
+        graphViewer.setInput(MapGraphContentProvider.getInitialInput());
 
         // D&D SUpport
         int operations = DND.DROP_COPY | DND.DROP_MOVE;
@@ -213,7 +215,8 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
          //GridLayoutAlgorithm gridAlgorithm = new
          //GridLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
         //TreeLayoutAlgorithm algorithm = new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING);
-        MapGridLayout algorithm = new MapGridLayout(LayoutStyles.NO_LAYOUT_NODE_RESIZING, 19, 23, AWDDataUIModelManager.getInstance().getAwMapNodes(), AWDDataUIModelManager.getInstance().getAwMapNodesPositions());
+        MapGridLayout algorithm = new MapGridLayout(LayoutStyles.NO_LAYOUT_NODE_RESIZING, MAP_ROWS, MAP_COLUMNS, 
+                AWDDataUIModelManager.getInstance().getAwMapNodes(), AWDDataUIModelManager.getInstance().getAwMapNodesPositions());
         /*
          * CompositeLayoutAlgorithm compositeAlgorithm = new
          * CompositeLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING, new

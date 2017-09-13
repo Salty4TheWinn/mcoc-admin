@@ -31,8 +31,8 @@ public class ChampionNodeFigure extends ImageFigure
 {
     private static final Image CHAMPION_NODE_IMAGE = McocAdminUiPlugin
             .getImageDescriptor("icons/generic/champion_node.png").createImage();
-    public static final int WIDTH = 46;
-    public static final int HEIGHT = 58;
+    public static final int WIDTH = 38;
+    public static final int HEIGHT = 48;
     private static final Image EMPTY_IMAGE;
     private static final Color NODE_NUMBER_BG_COLOR = new Color(Display.getCurrent(), 255, 171, 15);
     private static final Color NODE_NUMBER_FG_COLOR = new Color(Display.getCurrent(), 0, 0, 0);
@@ -98,7 +98,7 @@ public class ChampionNodeFigure extends ImageFigure
                     McocDataManager.CHAMPIONS_IMG_DIR + File.separator + pc.getId() + ".png").createImage();
 
             graphics.drawImage(champImg, champImg.getBounds().x, champImg.getBounds().y, champImg.getBounds().width,
-                    champImg.getBounds().height, area.x + 8, area.y + 5, 28, 28);
+                    champImg.getBounds().height, area.x + 7, area.y + 3, 24, 24);
 
             champImg.dispose();
         }
