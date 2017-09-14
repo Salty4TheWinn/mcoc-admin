@@ -58,14 +58,13 @@ public class MapGridLayout extends AbstractLayoutAlgorithm
     {
         double rowSize = boundsHeight / this.rows;
         double colSize = boundsWidth / this.columns;
-        
+
         // set a minimum so that we force the scroll bars keeping the map
         // nicely drown
         /*
-        if (rowSize < ChampionNodeFigure.HEIGHT)
-            rowSize = ChampionNodeFigure.HEIGHT;
-        if (colSize < ChampionNodeFigure.WIDTH)
-            colSize = ChampionNodeFigure.WIDTH;
+         * if (rowSize < ChampionNodeFigure.HEIGHT) rowSize =
+         * ChampionNodeFigure.HEIGHT; if (colSize < ChampionNodeFigure.WIDTH)
+         * colSize = ChampionNodeFigure.WIDTH;
          */
         for (InternalNode node : entitiesToLayout)
         {
@@ -87,6 +86,11 @@ public class MapGridLayout extends AbstractLayoutAlgorithm
 
                 node.setLocation((cellPos.getCol() * colSize) + fixAlignHorizontal,
                         (cellPos.getRow() * rowSize) + fixAlignVertical);
+            }
+            else
+            {
+                LOG.warning("Cannot find Node Cell Position for " + mapNode);
+                node.setLocation(boundsWidth-50, boundsHeight-50);
             }
 
         }

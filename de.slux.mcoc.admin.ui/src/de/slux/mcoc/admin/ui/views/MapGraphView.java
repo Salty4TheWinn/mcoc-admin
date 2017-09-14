@@ -51,7 +51,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
     private static final ImageDescriptor REFRESH_ICON = McocAdminUiPlugin.getImageDescriptor("icons/refresh.png");
     private static final Color BG_COLOR = new Color(Display.getCurrent(), 93, 113, 145);
 
-    private static final int MAP_ROWS = 51;
+    private static final int MAP_ROWS = 61;
     private static final int MAP_COLUMNS = 41;
 
     private GraphViewer graphViewer;

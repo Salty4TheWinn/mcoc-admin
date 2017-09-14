@@ -93,36 +93,63 @@ public class AWDDataUIModelManager
     }
 
     /**
-     * Based on a grid composed by 51 rows and 41 columns
+     * Based on a grid composed by 61 rows and 41 columns
      */
     private void setupAwMapNodePositions()
     {
         // Middle south (beginning)
-        addPos(NodeType.EmptyNode, 0, 48, 21);
-        addPos(NodeType.PortalNode, 12, 48, 18);
-        addPos(NodeType.PortalNode, 15, 48, 24);
-        addPos(NodeType.PortalNode, 14, 45, 21);
+        addPos(NodeType.EmptyNode, 0, 58, 21);
+        addPos(NodeType.PortalNode, 12, 58, 18);
+        addPos(NodeType.PortalNode, 15, 58, 24);
+        addPos(NodeType.PortalNode, 14, 55, 21);
 
         // South west (beginning)
-        addPos(NodeType.EmptyNode, 1, 44, 1);
-        addPos(NodeType.ChampionNode, 1, 40, 1);
-        addPos(NodeType.PortalNode, 3, 36, 1);
-        addPos(NodeType.ChampionNode, 2, 40, 4);
-        addPos(NodeType.PortalNode, 6, 36, 4);
-        addPos(NodeType.EmptyNode, 2, 44, 7);
-        addPos(NodeType.ChampionNode, 3, 40, 7);
-        addPos(NodeType.PortalNode, 7, 36, 7);
-        addPos(NodeType.EmptyNode, 4, 32, 1);
-        addPos(NodeType.EmptyNode, 5, 32, 7);
+        addPos(NodeType.EmptyNode, 1, 54, 1);
+        addPos(NodeType.ChampionNode, 1, 50, 1);
+        addPos(NodeType.PortalNode, 3, 46, 1);
+        addPos(NodeType.ChampionNode, 2, 50, 4);
+        addPos(NodeType.PortalNode, 6, 46, 4);
+        addPos(NodeType.EmptyNode, 2, 54, 7);
+        addPos(NodeType.ChampionNode, 3, 50, 7);
+        addPos(NodeType.PortalNode, 7, 46, 7);
+        addPos(NodeType.EmptyNode, 4, 40, 1);
+        addPos(NodeType.EmptyNode, 5, 40, 7);
+
+        // Middle west 
+        addPos(NodeType.ChampionNode, 19, 36, 1);
+        addPos(NodeType.ChampionNode, 20, 36, 4);
+        addPos(NodeType.ChampionNode, 21, 36, 7);
+        addPos(NodeType.PortalNode, 1, 32, 1);
+        addPos(NodeType.PortalNode, 2, 32, 4);
+        addPos(NodeType.PortalNode, 4, 32, 7);
+        addPos(NodeType.EmptyNode, 9, 28, 1);
+        addPos(NodeType.EmptyNode, 10, 28, 7);
+        addPos(NodeType.ChampionNode, 25, 24, 1);
+        addPos(NodeType.ChampionNode, 26, 24, 4);
+        addPos(NodeType.ChampionNode, 27, 24, 7);
+        addPos(NodeType.PortalNode, 5, 19, 4);
+        
+        // Top west
+        addPos(NodeType.EmptyNode, 16, 15, 3);
+        addPos(NodeType.EmptyNode, 17, 12, 0);
+        addPos(NodeType.ChampionNode, 46, 6, 0);
+        addPos(NodeType.ChampionNode, 49, 2, 3);
+        addPos(NodeType.ChampionNode, 50, 2, 6);
+        addPos(NodeType.ChampionNode, 41, 14, 6);
+        addPos(NodeType.ChampionNode, 45, 12, 9);
+        addPos(NodeType.ChampionNode, 47, 6, 9);
+        addPos(NodeType.PortalNode, 8, 1, 9);
+        addPos(NodeType.PortalNode, 9, 6, 12);
 
         // North middle (bosses)
-        addPos(NodeType.ChampionNode, 54, 1, 21);
-        addPos(NodeType.ChampionNode, 53, 1, 18);
-        addPos(NodeType.ChampionNode, 55, 1, 24);
-        addPos(NodeType.EmptyNode, 23, 6, 21);
-        addPos(NodeType.ChampionNode, 51, 6, 18);
-        addPos(NodeType.ChampionNode, 52, 6, 24);
-
+        addPos(NodeType.ChampionNode, 54, 0, 21);
+        addPos(NodeType.ChampionNode, 53, 0, 18);
+        addPos(NodeType.ChampionNode, 55, 0, 24);
+        addPos(NodeType.EmptyNode, 23, 5, 21);
+        addPos(NodeType.ChampionNode, 51, 5, 18);
+        addPos(NodeType.ChampionNode, 52, 5, 24);
+        addPos(NodeType.EmptyNode, 21, 1, 15);
+        addPos(NodeType.EmptyNode, 19, 6, 15);
     }
 
     private void addPos(NodeType type, int nodeNumber, int row, int column)
