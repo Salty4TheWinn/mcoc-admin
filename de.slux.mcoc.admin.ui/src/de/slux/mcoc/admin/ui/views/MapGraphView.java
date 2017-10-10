@@ -89,6 +89,7 @@ public class MapGraphView extends ViewPart implements IZoomableWorkbenchPart
             @Override
             public void doubleClick(DoubleClickEvent event)
             {
+                System.out.println(event.getSelection());
                 // force the detail view to be shown
                 /*
                 try

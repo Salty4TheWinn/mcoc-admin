@@ -115,7 +115,7 @@ public class AWDDataUIModelManager
         addPos(NodeType.EmptyNode, 4, 40, 1);
         addPos(NodeType.EmptyNode, 5, 40, 7);
 
-        // Middle west 
+        // Middle west
         addPos(NodeType.ChampionNode, 19, 36, 1);
         addPos(NodeType.ChampionNode, 20, 36, 4);
         addPos(NodeType.ChampionNode, 21, 36, 7);
@@ -128,7 +128,7 @@ public class AWDDataUIModelManager
         addPos(NodeType.ChampionNode, 26, 24, 4);
         addPos(NodeType.ChampionNode, 27, 24, 7);
         addPos(NodeType.PortalNode, 5, 19, 4);
-        
+
         // Top west
         addPos(NodeType.EmptyNode, 16, 15, 3);
         addPos(NodeType.EmptyNode, 17, 12, 0);
@@ -140,6 +140,22 @@ public class AWDDataUIModelManager
         addPos(NodeType.ChampionNode, 47, 6, 9);
         addPos(NodeType.PortalNode, 8, 1, 9);
         addPos(NodeType.PortalNode, 9, 6, 12);
+
+        // Middle centre
+        addPos(NodeType.EmptyNode, 6, 48, 18);
+        addPos(NodeType.EmptyNode, 7, 50, 21);
+        addPos(NodeType.EmptyNode, 8, 48, 24);
+        addPos(NodeType.ChampionNode, 11, 42, 18);
+        addPos(NodeType.ChampionNode, 10, 44, 21);
+        addPos(NodeType.ChampionNode, 12, 42, 24);
+        addPos(NodeType.ChampionNode, 17, 37, 18);
+        addPos(NodeType.ChampionNode, 16, 39, 21);
+        addPos(NodeType.ChampionNode, 18, 37, 24);
+        
+        addPos(NodeType.ChampionNode, 22, 32, 16);
+        addPos(NodeType.ChampionNode, 23, 32, 21);
+        addPos(NodeType.ChampionNode, 24, 32, 26);
+        
 
         // North middle (bosses)
         addPos(NodeType.ChampionNode, 54, 0, 21);
@@ -230,8 +246,10 @@ public class AWDDataUIModelManager
                 new NodeId[] { new NodeId(NodeType.EmptyNode, 1), new NodeId(NodeType.EmptyNode, 2) });
         connectNode(new NodeId(NodeType.PortalNode, 13), new NodeId[] { new NodeId(NodeType.EmptyNode, 11),
                 new NodeId(NodeType.EmptyNode, 12), new NodeId(NodeType.EmptyNode, 13) });
-        connectNode(new NodeId(NodeType.PortalNode, 7), new NodeId[] { new NodeId(NodeType.EmptyNode, 6),
-                new NodeId(NodeType.EmptyNode, 12), new NodeId(NodeType.EmptyNode, 8) });
+        connectNode(new NodeId(NodeType.PortalNode, 14), new NodeId[] { new NodeId(NodeType.EmptyNode, 6),
+                new NodeId(NodeType.EmptyNode, 7), new NodeId(NodeType.EmptyNode, 8) });
+        connectNode(new NodeId(NodeType.PortalNode, 7),
+                new NodeId[] { new NodeId(NodeType.EmptyNode, 6), new NodeId(NodeType.EmptyNode, 5) });
         connectNode(new NodeId(NodeType.PortalNode, 15), new NodeId[] { new NodeId(NodeType.EmptyNode, 3) });
         connectNode(new NodeId(NodeType.PortalNode, 16),
                 new NodeId[] { new NodeId(NodeType.EmptyNode, 18), new NodeId(NodeType.EmptyNode, 20) });
